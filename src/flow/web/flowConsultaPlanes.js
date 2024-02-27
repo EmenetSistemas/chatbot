@@ -8,8 +8,12 @@ const flowConsultaPlanes = addKeyword(['1', 'planes'])
         null,
         async (_, { flowDynamic }) => {
             const planes = await obtenerPlanesInternet();
-            await flowDynamic(planes);
-            await flowDynamic('¿Que plan te interesa más?');
+            await flowDynamic(
+                [
+                    planes,
+                    '¿Que plan te interesa más?'
+                ]
+            );
         }
     )
     .addAnswer(
@@ -31,17 +35,29 @@ const flowConsultaPlanes = addKeyword(['1', 'planes'])
                 const plan = await obtenerPlanPorId(input);
 
                 if (plan == null) {
-                    await flowDynamic('No se encontró ningún plan con ese identificador\nSe debe colocar un plan válido');
-                    await flowDynamic('¿Que plan te interesa más?');
+                    await flowDynamic(
+                        [
+                            'No se encontró ningún plan con ese identificador\nSe debe colocar un plan válido',
+                            '¿Que plan te interesa más?'
+                        ]
+                    );
                     return fallBack();
                 }
 
-                await flowDynamic(plan);
-                await flowDynamic('¿En que más te puedo ayudar?');
+                await flowDynamic(
+                    [
+                        plan,
+                        '¿En que más te puedo ayudar?'
+                    ]
+                );
                 return fallBack();
             } else {
-                await flowDynamic('Se debe colocar una opción válida');
-                await flowDynamic('¿Que plan te interesa más?');
+                await flowDynamic(
+                    [
+                        'Se debe colocar una opción válida',
+                        '¿Que plan te interesa más?'
+                    ]
+                );
                 return fallBack();
             }
         }
