@@ -1,6 +1,6 @@
 const { addKeyword } = require("@bot-whatsapp/bot");
-
 const { obtenerPlanesInternet, obtenerPlanPorId } = require("../../services/web.service");
+const { flowPrincipal } = require("../start/flowPrincipal");
 
 const flowConsultaPlanes = addKeyword(['1', 'planes'])
     .addAnswer(
@@ -8,12 +8,7 @@ const flowConsultaPlanes = addKeyword(['1', 'planes'])
         null,
         async (_, { flowDynamic }) => {
             const planes = await obtenerPlanesInternet();
-            await flowDynamic(
-                [
-                    planes,
-                    '¿Que plan te interesa más?'
-                ]
-            );
+            await flowDynamic([planes, '¿Qué plan te interesa más?']);
         }
     )
     .addAnswer(
@@ -23,10 +18,10 @@ const flowConsultaPlanes = addKeyword(['1', 'planes'])
             '- *Menu* para volver al menú principal'
         ],
         { capture: true },
-        async (ctx, { flowDynamic, gotoFlow, fallBack }) => {
-            const input = ctx.body.toLowerCase();
+        async ({ body }, { flowDynamic, gotoFlow, fallBack }) => {
+            const input = body.toLowerCase();
 
-            if (input == 'menu') {
+            if (input === 'menu') {
                 const {flowPrincipal} = require("../start/flowPrincipal");
                 return await gotoFlow(flowPrincipal);
             }
@@ -34,33 +29,23 @@ const flowConsultaPlanes = addKeyword(['1', 'planes'])
             if (!isNaN(input)) {
                 const plan = await obtenerPlanPorId(input);
 
-                if (plan == null) {
-                    await flowDynamic(
-                        [
-                            'No se encontró ningún plan con ese identificador\nSe debe colocar un plan válido',
-                            '¿Que plan te interesa más?'
-                        ]
-                    );
-                    return fallBack();
+                if (!plan) {
+                    await flowDynamic([
+                        'No se encontró ningún plan con ese identificador\nPor favor, introduce un identificador válido.',
+                        '¿Qué plan te interesa más?'
+                    ]);
+                } else {
+                    await flowDynamic([plan, '¿En qué más te puedo ayudar?']);
                 }
-
-                await flowDynamic(
-                    [
-                        plan,
-                        '¿En que más te puedo ayudar?'
-                    ]
-                );
-                return fallBack();
             } else {
-                await flowDynamic(
-                    [
-                        'Se debe colocar una opción válida',
-                        '¿Que plan te interesa más?'
-                    ]
-                );
-                return fallBack();
+                await flowDynamic([
+                    'Se debe colocar una opción válida',
+                    '¿Qué plan te interesa más?'
+                ]);
             }
+
+            await fallBack();
         }
-    )
+    );
 
 module.exports = { flowConsultaPlanes };
