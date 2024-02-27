@@ -1,22 +1,16 @@
-### CHATBOT Whatsapp (Baileys Provider)
+### CHATBOT Whatsapp Emenet (Proveedor Baileys)
 
 <p align="center">
   <img width="300" src="https://i.imgur.com/Oauef6t.png">
 </p>
 
 
-**Con esta librería, puedes construir flujos automatizados de conversación de manera agnóstica al proveedor de WhatsApp,** configurar respuestas automatizadas para preguntas frecuentes, recibir y responder mensajes de manera automatizada, y hacer un seguimiento de las interacciones con los clientes.  Además, puedes configurar fácilmente disparadores que te ayudaran a expandir las funcionalidades sin límites. **[Ver documentación](https://bot-whatsapp.netlify.app/)**
+*Con esta librería, puedes construir flujos automatizados de conversación de manera agnóstica al proveedor de WhatsApp.* Se creó el bot con el fin de ser una herramienta útil agilizando procesos simples dentro del negocio de la empresa.
+
+Se modificó la plantilla original que ofrece netlify con el fin de tener flujos mejor administrados, simples, claros pero capaces de resolver un problema puntual.**
 
 
 ```
 npm install
 npm start
 ```
-
----
-## Recursos
-- [📄 Documentación](https://bot-whatsapp.netlify.app/)
-- [🚀 Roadmap](https://github.com/orgs/codigoencasa/projects/1)
-- [💻 Discord](https://link.codigoencasa.com/DISCORD)
-- [👌 Twitter](https://twitter.com/leifermendez)
-- [🎥 Youtube](https://www.youtube.com/watch?v=5lEMCeWEJ8o&list=PL_WGMLcL4jzWPhdhcUyhbFU6bC0oJd2BR)
