@@ -45,7 +45,7 @@ const flowContratacion = addKeyword('3', { sensitive: true })
                 const planes = await obtenerPlanesInternet();
                 return await flowDynamic([
                     'Excelente, en ' + localidad + ' contamos con cobertura',
-                    '¿Cuál es plan que te interesa más?',
+                    '¿Cuál es el plan que te interesa más?',
                     planes
                 ]);
             }

@@ -317,40 +317,36 @@ const obtenerPlanPorId = async (id) => {
 const obtenerZonasCobertura = async (input) => {
     const inputNormalized = normalizeString(input);
 
-    if (!isNaN(input) && zonas[input - 1]) {
-        const comExac = zonas.find(item => item.indice == input);
-
-        if (comExac) {
-            return {
-                responseType: 1,
-                comunidad: comExac.comunidad,
-                mensaje: 'En la comunidad de ' + comExac.comunidad + ' si contamos con cobertura de internet, solo resta verificar la ubicación exacta de tu domicilio para que puedas agendar una instalación en tú domicilio y puedas disfrutar de nuestro exelente servicio'
-            };
-        }
+    const indiceInput = parseInt(input);
+    const comExac = zonas.find(item => item.indice === indiceInput);
+    if (!isNaN(indiceInput) && comExac) {
+        return {
+            responseType: 1,
+            comunidad: comExac.comunidad,
+            mensaje: `En la comunidad de ${comExac.comunidad} sí contamos con cobertura de internet. Solo falta verificar la ubicación exacta de tu domicilio para que puedas agendar una instalación y disfrutar de nuestro excelente servicio.`
+        };
     }
 
-    const palabrasInput = inputNormalized.split(' ');
-
-    const coincidenciasExactas = zonas.filter(({ comunidad }) => {
-        const comunidadNormalized = normalizeString(comunidad);
-
-        return comunidadNormalized == inputNormalized;
+    const zonasOrdenadas = zonas.sort((a, b) => {
+        return a.indice - b.indice;
     });
 
+    const coincidenciasExactas = zonasOrdenadas.filter(({ comunidad }) => normalizeString(comunidad) === inputNormalized);
     if (coincidenciasExactas.length > 0) {
         return {
             responseType: 1,
             comunidad: coincidenciasExactas[0].comunidad,
-            mensaje: 'En la comunidad de ' + coincidenciasExactas[0].comunidad + ' si contamos con cobertura de internet, solo resta verificar la ubicación exacta de tu domicilio para que puedas agendar una instalación en tú domicilio y puedas disfrutar de nuestro exelente servicio'
+            mensaje: `En la comunidad de ${coincidenciasExactas[0].comunidad} sí contamos con cobertura de internet. Solo falta verificar la ubicación exacta de tu domicilio para que puedas agendar una instalación y disfrutar de nuestro excelente servicio.`
         };
     }
 
-    const coincidenciasParciales = zonas.filter(({ comunidad }) => {
-        const comunidadNormalized = normalizeString(comunidad);
-
-        return palabrasInput.some(palabra => comunidadNormalized.includes(palabra));
-    });
-
+    const palabrasInput = inputNormalized.split(' ');
+    const coincidenciasParciales = zonasOrdenadas.filter(({ comunidad }) => {
+        return palabrasInput.some(palabra => {
+            const interZona = normalizeString(comunidad).split(' ');
+            return interZona.some(pComuni => pComuni === palabra);
+        });
+    });    
     if (coincidenciasParciales.length > 0) {
         return {
             responseType: 2,
@@ -362,7 +358,8 @@ const obtenerZonasCobertura = async (input) => {
     return {
         responseType: 3
     };
-}
+};
+
 
 const formatarResultado = (coincidencias) => {
     return '\n' + coincidencias.map((item) => `${item.indice}. ${item.comunidad}`).join('\n');
