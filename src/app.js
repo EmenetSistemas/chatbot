@@ -10,6 +10,8 @@ const main = async () => {
         flow,
         provider: createProvider(BaileysProvider),
         database: new MockAdapter()
+    }, {
+        blackList:[]
     })
     
     QRPortalWeb()

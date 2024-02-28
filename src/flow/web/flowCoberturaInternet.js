@@ -2,7 +2,7 @@ const { addKeyword } = require("@bot-whatsapp/bot");
 
 const { normalizeString, obtenerZonasCobertura } = require("../../services/web.service");
 
-const flowCoberturaInternet = addKeyword(['2', 'cobertura'])
+const flowCoberturaInternet = addKeyword('2', { sensitive: true })
     .addAnswer('¿Qué te gustaría hacer?')
     .addAnswer(
         [
@@ -11,19 +11,19 @@ const flowCoberturaInternet = addKeyword(['2', 'cobertura'])
             '- *Menu* para volver al menú principal'
         ],
         { capture: true },
-        async ({ body }, { flowDynamic, fallBack }) => {
+        async ({ body }, { flowDynamic, fallBack, gotoFlow }) => {
             const input = normalizeString(body);
 
             if (input == 'menu') {
-                const { flowPrincipal } = require("../start/flowPrincipal");
-                return await gotoFlow(flowPrincipal);
+                const { flowSecundario } = require("../start/flowSecundario");
+                return await gotoFlow(flowSecundario);
             }
 
             const coberturas = await obtenerZonasCobertura(input);
 
             if (coberturas.responseType == 3) {
                 await flowDynamic([
-                    'Upss..! Al parecer aúm no contamos con servicio en tu localidad'
+                    'No indetifico tú localidad, puedes intentar de nuevo verificando errores de escritura'
                 ]);
             }
 
@@ -35,19 +35,13 @@ const flowCoberturaInternet = addKeyword(['2', 'cobertura'])
             }
 
             if (coberturas.responseType == 1) {
-                return flowDynamic([
-                    coberturas.mensaje,
-                    '¿Te gustaría conctactar con un asesor para contratar internet? *(si/no)*'
-                ]);
+                await flowDynamic(coberturas.mensaje);
+                const { flowSecundario } = require("../start/flowSecundario");
+                return await gotoFlow(flowSecundario);
             }
 
             return fallBack();
         }
     )
-    .addAction(async(ctx) => {
-
-        console.log(`Enviar un mail con el con el numero de la persona: ${ctx.from}`)
-        
-    })
 
 module.exports = { flowCoberturaInternet };

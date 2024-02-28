@@ -156,6 +156,7 @@ const obtenerZonasCobertura = async (input) => {
     if (coincidenciasExactas.length > 0) {
         return {
             responseType : 1,
+            comunidad : coincidenciasExactas[0].comunidad,
             mensaje : 'En la comunidad de '+coincidenciasExactas[0].comunidad+' si contamos con cobertura de internet, solo resta verificar la ubicación exacta de tu domicilio para que puedas agendar una instalación en tú domicilio y puedas disfrutar de nuestro exelente servicio'
         };
     }

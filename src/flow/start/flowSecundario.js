@@ -1,16 +1,20 @@
 const { addKeyword } = require("@bot-whatsapp/bot");
-const { flowInternet } = require("../web");
+
+const { flowConsultaPlanes } = require("../web/flowConsultaPlanes");
+const { flowCoberturaInternet } = require("../web/flowCoberturaInternet");
 
 const flowSecundario = addKeyword(['no'])
     .addAnswer(
         [
-            '¿Qué más te gusraría hacer por ahora?',
+            '¿En que más puedo ayudarte el día de hoy?',
             '',
-            '1. 📋 *Internet* (ver los planes con los que contamos y más)'
+            '1. Ver planes de internet',
+            '2. Validar mi cobertura',
+            '3. Conctactar con un asesor para contratar internet'
         ],
         null,
         null,
-        [flowInternet]
+        [flowConsultaPlanes, flowCoberturaInternet]
     )
 
 module.exports = { flowSecundario };

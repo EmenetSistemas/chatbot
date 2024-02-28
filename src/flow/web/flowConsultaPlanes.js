@@ -2,7 +2,7 @@ const { addKeyword } = require("@bot-whatsapp/bot");
 
 const { obtenerPlanesInternet, obtenerPlanPorId, normalizeString } = require("../../services/web.service");
 
-const flowConsultaPlanes = addKeyword(['1', 'planes', 'si'])
+const flowConsultaPlanes = addKeyword('1', { sensitive: true })
     .addAnswer(
         'Los planes/paquetes de internet con los que contamos actualmente, son los siguientes:',
         null,
@@ -40,11 +40,13 @@ const flowConsultaPlanes = addKeyword(['1', 'planes', 'si'])
                         '¿Qué plan te interesa más?'
                     ]);
                 } else {
-                    await flowDynamic([plan, '¿En qué más te puedo ayudar?']);
+                    await flowDynamic(plan);
+                    const { flowSecundario } = require("../start/flowSecundario");
+                    return await gotoFlow(flowSecundario);
                 }
             }
 
-            await fallBack();
+            return fallBack();
         }
     );
 

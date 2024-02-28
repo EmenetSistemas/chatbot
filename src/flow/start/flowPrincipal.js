@@ -1,8 +1,9 @@
 const { addKeyword } = require('@bot-whatsapp/bot');
 
 const { obtenerSaludo } = require('../../services/web.service');
-
-const { flowInternet } = require('../web');
+const { flowConsultaPlanes } = require('../web/flowConsultaPlanes');
+const { flowCoberturaInternet } = require('../web/flowCoberturaInternet');
+const { flowContratacion } = require('../web/flowContratacion');
 
 const flowPrincipal = addKeyword(['hola'])
     .addAnswer(`🙌 Hola ${obtenerSaludo()}, bienvenido al 🤖 chatbot de *Emenet*`)
@@ -10,11 +11,13 @@ const flowPrincipal = addKeyword(['hola'])
         [
             '¿En que puedo ayudarte el día de hoy?',
             '',
-            '1. 📋 *Internet* (ver los planes con los que contamos y más)'
+            '1. Ver planes de internet',
+            '2. Validar mi cobertura',
+            '3. Conctactar con un asesor para contratar internet'
         ],
         null,
         null,
-        [flowInternet]
+        [flowConsultaPlanes, flowCoberturaInternet, flowContratacion]
     )
 
 module.exports = { flowPrincipal };
