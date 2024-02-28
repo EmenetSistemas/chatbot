@@ -2,6 +2,265 @@ const { default: axios } = require("axios");
 
 const url = 'https://prueba.m-net.mx/public/api/';
 
+const zonas = [
+    {
+        indice: 1,
+        comunidad: 'Acazulco'
+    }, {
+        indice: 2,
+        comunidad: 'Agua Blanca'
+    }, {
+        indice: 4,
+        comunidad: 'Ahuatenco'
+    }, {
+        indice: 70,
+        comunidad: 'Ahuehuete'
+    }, {
+        indice: 46,
+        comunidad: 'Almaya'
+    }, {
+        indice: 45,
+        comunidad: 'Almoloya del Río'
+    }, {
+        indice: 47,
+        comunidad: 'Amate (Cuernavaca)'
+    }, {
+        indice: 55,
+        comunidad: 'Arcos'
+    }, {
+        indice: 62,
+        comunidad: 'Atlantlacpac'
+    }, {
+        indice: 6,
+        comunidad: 'Atlantlalpac'
+    }, {
+        indice: 5,
+        comunidad: 'Atlapulco'
+    }, {
+        indice: 57,
+        comunidad: 'Calimaya'
+    }, {
+        indice: 10,
+        comunidad: 'Capulhuac'
+    }, {
+        indice: 65,
+        comunidad: 'Chapultepec'
+    }, {
+        indice: 7,
+        comunidad: 'Civac Los Robles (Cuernavaca)'
+    }, {
+        indice: 11,
+        comunidad: 'Coamilpa'
+    }, {
+        indice: 63,
+        comunidad: 'Coatepec centro'
+    }, {
+        indice: 72,
+        comunidad: 'Colonia Libertad'
+    }, {
+        indice: 74,
+        comunidad: 'Colonia San Isidro'
+    }, {
+        indice: 8,
+        comunidad: 'Coyoltepec'
+    }, {
+        indice: 3,
+        comunidad: 'Cuernavaca'
+    }, {
+        indice: 79,
+        comunidad: 'El Guarda'
+    }, {
+        indice: 13,
+        comunidad: 'El Mirasol'
+    }, {
+        indice: 14,
+        comunidad: 'El Pedregal'
+    }, {
+        indice: 15,
+        comunidad: 'El Potrero'
+    }, {
+        indice: 71,
+        comunidad: 'Ex-hacienda de Atenco'
+    }, {
+        indice: 16,
+        comunidad: 'Fracc. Buen Suceso'
+    }, {
+        indice: 17,
+        comunidad: 'Gualupita'
+    }, {
+        indice: 12,
+        comunidad: 'Gustavo Baz'
+    }, {
+        indice: 75,
+        comunidad: 'Ixtlahuaca Emiliano Zapata'
+    }, {
+        indice: 78,
+        comunidad: 'Ixtlahuaca G. Cachi'
+    }, {
+        indice: 85,
+        comunidad: 'Ixtlahuaca San Jerónimo Ixtapatongo'
+    }, {
+        indice: 84,
+        comunidad: 'Ixtlahuaca San Joaquín'
+    }, {
+        indice: 76,
+        comunidad: 'Ixtlahuaca San Mateo'
+    }, {
+        indice: 73,
+        comunidad: 'Ixtlahuaca Santo Domingo'
+    }, {
+        indice: 82,
+        comunidad: 'Joquicingo'
+    }, {
+        indice: 21,
+        comunidad: 'La Esperanza'
+    }, {
+        indice: 58,
+        comunidad: 'La Florida'
+    }, {
+        indice: 18,
+        comunidad: 'La Marquesa'
+    }, {
+        indice: 22,
+        comunidad: 'La Pastoría'
+    }, {
+        indice: 19,
+        comunidad: 'Lagunilla Chalma'
+    }, {
+        indice: 20,
+        comunidad: 'Lagunilla Tlazala'
+    }, {
+        indice: 53,
+        comunidad: 'Llano del Compromiso'
+    }, {
+        indice: 52,
+        comunidad: 'Lomas de Teocaltzingo'
+    }, {
+        indice: 83,
+        comunidad: 'Maxtleca'
+    }, {
+        indice: 61,
+        comunidad: 'Meztitla'
+    }, {
+        indice: 23,
+        comunidad: 'Morelos'
+    }, {
+        indice: 59,
+        comunidad: 'Ocotenco'
+    }, {
+        indice: 24,
+        comunidad: 'Ocoyoacac'
+    }, {
+        indice: 68,
+        comunidad: 'Ocuilan'
+    }, {
+        indice: 54,
+        comunidad: 'Paseos del Río'
+    }, {
+        indice: 28,
+        comunidad: 'San Bartolo'
+    }, {
+        indice: 81,
+        comunidad: 'San Francisco Tepexoxuca'
+    }, {
+        indice: 34,
+        comunidad: 'San José Mezapa'
+    }, {
+        indice: 27,
+        comunidad: 'San Juan Atzingo'
+    }, {
+        indice: 26,
+        comunidad: 'San Lorenzo'
+    }, {
+        indice: 36,
+        comunidad: 'San Lorenzo Huehuetitlán'
+    }, {
+        indice: 80,
+        comunidad: 'San Miguel de Ocampo'
+    }, {
+        indice: 50,
+        comunidad: 'San Nicolás Coatepec'
+    }, {
+        indice: 9,
+        comunidad: 'San Pedro Cholula'
+    }, {
+        indice: 66,
+        comunidad: 'San Pedro Techuchulco'
+    }, {
+        indice: 32,
+        comunidad: 'San Pedro Tlaltizapán'
+    }, {
+        indice: 25,
+        comunidad: 'Santa Ana'
+    }, {
+        indice: 51,
+        comunidad: 'Santa Cruz Atizapán'
+    }, {
+        indice: 48,
+        comunidad: 'Santa Fe Mezapa'
+    }, {
+        indice: 30,
+        comunidad: 'Santa Lucía'
+    }, {
+        indice: 77,
+        comunidad: 'Santa María Coaxusco'
+    }, {
+        indice: 67,
+        comunidad: 'Santa María Jajalpa'
+    }, {
+        indice: 29,
+        comunidad: 'Santa Martha'
+    }, {
+        indice: 35,
+        comunidad: 'Santa Mónica'
+    }, {
+        indice: 31,
+        comunidad: 'Santiago Tianguistenco'
+    }, {
+        indice: 56,
+        comunidad: 'Sauces 2'
+    }, {
+        indice: 44,
+        comunidad: 'Sauces Cuernavaca'
+    }, {
+        indice: 64,
+        comunidad: 'Techmalinalli'
+    }, {
+        indice: 49,
+        comunidad: 'Tenango del Valle'
+    }, {
+        indice: 41,
+        comunidad: 'Tepetzingo'
+    }, {
+        indice: 33,
+        comunidad: 'Texcalyacac'
+    }, {
+        indice: 86,
+        comunidad: 'Tezontepec'
+    }, {
+        indice: 38,
+        comunidad: 'Tilapa'
+    }, {
+        indice: 40,
+        comunidad: 'Tlacomulco'
+    }, {
+        indice: 39,
+        comunidad: 'Tlacuitlapa'
+    }, {
+        indice: 60,
+        comunidad: 'Tlaminca'
+    }, {
+        indice: 37,
+        comunidad: 'Tlazala'
+    }, {
+        indice: 42,
+        comunidad: 'Tultepec'
+    }, {
+        indice: 43,
+        comunidad: 'Xalatlaco'
+    }
+];
+
 const obtenerSaludo = () => {
     const horaActual = new Date().getHours();
     if (horaActual >= 5 && horaActual < 12) {
@@ -22,7 +281,7 @@ const obtenerPlanesInternet = async () => {
         const response = await axios.get(`${url}internet/planes`);
         const objPlanes = response.data.data.planesInternet;
 
-        const mensajes = '\n'+objPlanes.map(item => {
+        const mensajes = '\n' + objPlanes.map(item => {
             const periodo = item.mensualidad ? 'al mes' : 'al año';
             return `${item.pkTblPlan}. *${item.plan}* x *${item.mensualidad ?? item.anualidad}* ${periodo}`;
         }).join('\n');
@@ -57,97 +316,22 @@ const obtenerPlanPorId = async (id) => {
 
 const obtenerZonasCobertura = async (input) => {
     const inputNormalized = normalizeString(input);
+
+    if (!isNaN(input) && zonas[input - 1]) {
+        const comExac = zonas.find(item => item.indice == input);
+
+        if (comExac) {
+            return {
+                responseType: 1,
+                comunidad: comExac.comunidad,
+                mensaje: 'En la comunidad de ' + comExac.comunidad + ' si contamos con cobertura de internet, solo resta verificar la ubicación exacta de tu domicilio para que puedas agendar una instalación en tú domicilio y puedas disfrutar de nuestro exelente servicio'
+            };
+        }
+    }
+
     const palabrasInput = inputNormalized.split(' ');
 
-    const cobertura = [
-        {comunidad: 'Acazulco'},
-        {comunidad: 'Agua Blanca'},
-        {comunidad: 'Ahuatenco'},
-        {comunidad: 'Ahuehuete'},
-        {comunidad: 'Almaya'},
-        {comunidad: 'Almoloya del Río'},
-        {comunidad: 'Amate (Cuernavaca)'},
-        {comunidad: 'Arcos'},
-        {comunidad: 'Atlantlacpac'},
-        {comunidad: 'Atlantlalpac'},
-        {comunidad: 'Atlapulco'},
-        {comunidad: 'Calimaya'},
-        {comunidad: 'Capulhuac'},
-        {comunidad: 'Chapultepec'},
-        {comunidad: 'Civac Los Robles (Cuernavaca)'},
-        {comunidad: 'Coamilpa'},
-        {comunidad: 'Coatepec centro'},
-        {comunidad: 'Colonia Libertad'},
-        {comunidad: 'Colonia San Isidro'},
-        {comunidad: 'Coyoltepec'},
-        {comunidad: 'Cuernavaca'},
-        {comunidad: 'El Guarda'},
-        {comunidad: 'El Mirasol'},
-        {comunidad: 'El Pedregal'},
-        {comunidad: 'El Potrero'},
-        {comunidad: 'Ex-hacienda de Atenco'},
-        {comunidad: 'Fracc. Buen Suceso'},
-        {comunidad: 'Gualupita'},
-        {comunidad: 'Gustavo Baz'},
-        {comunidad: 'Ixtlahuaca Emiliano Zapata'},
-        {comunidad: 'Ixtlahuaca G. Cachi'},
-        {comunidad: 'Ixtlahuaca San Jerónimo Ixtapatongo'},
-        {comunidad: 'Ixtlahuaca San Joaquín'},
-        {comunidad: 'Ixtlahuaca San Mateo'},
-        {comunidad: 'Ixtlahuaca Santo Domingo'},
-        {comunidad: 'Joquicingo'},
-        {comunidad: 'La Esperanza'},
-        {comunidad: 'La Florida'},
-        {comunidad: 'La Marquesa'},
-        {comunidad: 'La Pastoría'},
-        {comunidad: 'Lagunilla Chalma'},
-        {comunidad: 'Lagunilla Tlazala'},
-        {comunidad: 'Llano del Compromiso'},
-        {comunidad: 'Lomas de Teocaltzingo'},
-        {comunidad: 'Maxtleca'},
-        {comunidad: 'Meztitla'},
-        {comunidad: 'Morelos'},
-        {comunidad: 'Ocotenco'},
-        {comunidad: 'Ocoyoacac'},
-        {comunidad: 'Ocuilan'},
-        {comunidad: 'Paseos del Río'},
-        {comunidad: 'San Bartolo'},
-        {comunidad: 'San Francisco Tepexoxuca'},
-        {comunidad: 'San José Mezapa'},
-        {comunidad: 'San Juan Atzingo'},
-        {comunidad: 'San Lorenzo'},
-        {comunidad: 'San Lorenzo Huehuetitlán'},
-        {comunidad: 'San Miguel de Ocampo'},
-        {comunidad: 'San Nicolás Coatepec'},
-        {comunidad: 'San Pedro Cholula'},
-        {comunidad: 'San Pedro Techuchulco'},
-        {comunidad: 'San Pedro Tlaltizapán'},
-        {comunidad: 'Santa Ana'},
-        {comunidad: 'Santa Cruz Atizapán'},
-        {comunidad: 'Santa Fe Mezapa'},
-        {comunidad: 'Santa Lucía'},
-        {comunidad: 'Santa María Coaxusco'},
-        {comunidad: 'Santa María Jajalpa'},
-        {comunidad: 'Santa Martha'},
-        {comunidad: 'Santa Mónica'},
-        {comunidad: 'Santiago Tianguistenco'},
-        {comunidad: 'Sauces 2'},
-        {comunidad: 'Sauces Cuernavaca'},
-        {comunidad: 'Techmalinalli'},
-        {comunidad: 'Tenango del Valle'},
-        {comunidad: 'Tepetzingo'},
-        {comunidad: 'Texcalyacac'},
-        {comunidad: 'Tezontepec'},
-        {comunidad: 'Tilapa'},
-        {comunidad: 'Tlacomulco'},
-        {comunidad: 'Tlacuitlapa'},
-        {comunidad: 'Tlaminca'},
-        {comunidad: 'Tlazala'},
-        {comunidad: 'Tultepec'},
-        {comunidad: 'Xalatlaco'}
-    ];
-
-    const coincidenciasExactas = cobertura.filter(({ comunidad }) => {
+    const coincidenciasExactas = zonas.filter(({ comunidad }) => {
         const comunidadNormalized = normalizeString(comunidad);
 
         return comunidadNormalized == inputNormalized;
@@ -155,32 +339,33 @@ const obtenerZonasCobertura = async (input) => {
 
     if (coincidenciasExactas.length > 0) {
         return {
-            responseType : 1,
-            comunidad : coincidenciasExactas[0].comunidad,
-            mensaje : 'En la comunidad de '+coincidenciasExactas[0].comunidad+' si contamos con cobertura de internet, solo resta verificar la ubicación exacta de tu domicilio para que puedas agendar una instalación en tú domicilio y puedas disfrutar de nuestro exelente servicio'
+            responseType: 1,
+            comunidad: coincidenciasExactas[0].comunidad,
+            mensaje: 'En la comunidad de ' + coincidenciasExactas[0].comunidad + ' si contamos con cobertura de internet, solo resta verificar la ubicación exacta de tu domicilio para que puedas agendar una instalación en tú domicilio y puedas disfrutar de nuestro exelente servicio'
         };
     }
 
-    const coincidenciasParciales = cobertura.filter(({ comunidad }) => {
+    const coincidenciasParciales = zonas.filter(({ comunidad }) => {
         const comunidadNormalized = normalizeString(comunidad);
-        
+
         return palabrasInput.some(palabra => comunidadNormalized.includes(palabra));
     });
 
     if (coincidenciasParciales.length > 0) {
         return {
-            responseType : 2,
-            mensaje : formatarResultado(coincidenciasParciales)
+            responseType: 2,
+            mensaje: formatarResultado(coincidenciasParciales),
+            zonasTemp: coincidenciasParciales
         };
     }
 
     return {
-        responseType : 3
+        responseType: 3
     };
 }
 
 const formatarResultado = (coincidencias) => {
-    return '\n'+coincidencias.map(({ comunidad }) => `- ${comunidad}`).join('\n');
+    return '\n' + coincidencias.map((item) => `${item.indice}. ${item.comunidad}`).join('\n');
 }
 
 module.exports = {
