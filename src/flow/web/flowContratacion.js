@@ -1,7 +1,14 @@
 const { addKeyword } = require("@bot-whatsapp/bot");
+
 const { obtenerZonasCobertura, normalizeString, obtenerPlanPorId, obtenerPlanesInternet } = require("../../services/web.service");
+const { crearMensajeConBotones } = require("../../services/generic.service");
 
 let nombre, telefono, localidad, paquete, ubicacion;
+
+const textoPrincipal = '🤖 ¿Cuál es tu nombre?';
+const botones = [
+    { textoBoton: '❌ Cancelar proceso' }
+];
 
 const flowContratacion = addKeyword(['b', '3'], { sensitive: true })
     .addAnswer([
@@ -9,20 +16,38 @@ const flowContratacion = addKeyword(['b', '3'], { sensitive: true })
         '',
         '❌ Si deseas cancelar este proceso lo puedes hacer en cualquier momento escribiendo la palabra *cancelar*'
     ])
-    .addAnswer(
-        '🤖 ¿Cúal es tú nombre?',
+    .addAction(
+        async ({ from }) => {
+            await crearMensajeConBotones(from, textoPrincipal, botones)
+        }
+    )
+    .addAction(
         { capture: true },
-        async (ctx, { flowDynamic }) => {
+        async (ctx, { flowDynamic, gotoFlow }) => {
+            if (ctx.body == '❌ Cancelar proceso') {
+                const { flowSecundario } = require("../start/flowSecundario");
+                return await gotoFlow(flowSecundario);
+            }
+
             nombre = ctx.body;
             telefono = ctx.from;
 
             return await flowDynamic('Mucho gusto ' + nombre + ', continuemos...');
         }
     )
-    .addAnswer(
-        '🤖 ¿Cuál es la localidad en donde vive?',
+    .addAction(
+        async ({ from }) => {
+            await crearMensajeConBotones(from, textoPrincipal, botones)
+        }
+    )
+    .addAction(
         { capture: true },
-        async ({ body }, { flowDynamic, fallBack }) => {
+        async ({ body }, { flowDynamic, fallBack, gotoFlow }) => {
+            if (body == '❌ Cancelar proceso') {
+                const { flowSecundario } = require("../start/flowSecundario");
+                return await gotoFlow(flowSecundario);
+            }
+
             const input = normalizeString(body);
 
             const coberturas = await obtenerZonasCobertura(input);
@@ -56,6 +81,11 @@ const flowContratacion = addKeyword(['b', '3'], { sensitive: true })
     .addAction(
         { capture: true },
         async ({ body }, { flowDynamic, fallBack }) => {
+            if (body == '❌ Cancelar proceso') {
+                const { flowSecundario } = require("../start/flowSecundario");
+                return await gotoFlow(flowSecundario);
+            }
+
             const input = normalizeString(body);
 
             if (isNaN(input)) {
@@ -86,6 +116,11 @@ const flowContratacion = addKeyword(['b', '3'], { sensitive: true })
     .addAction(
         { capture: true },
         async (ctx, { flowDynamic, fallBack }) => {
+            if (body == '❌ Cancelar proceso') {
+                const { flowSecundario } = require("../start/flowSecundario");
+                return await gotoFlow(flowSecundario);
+            }
+
             const coordenadas = ctx.message.locationMessage;
 
             if (coordenadas) {
@@ -100,7 +135,7 @@ const flowContratacion = addKeyword(['b', '3'], { sensitive: true })
                     '🤖 ¿La información es la correcta?\n\n    a. Continuar con el proceso\n    b. Cancelar el proceso'
                 ])
             }
-            
+
             await flowDynamic('No es lo que se esperaba.\n\n¿Podría compartirnos su ubicación actual/fija?\nEsto con el fin de ubicar exactamente tu domicilio')
             return await fallBack();
         }
