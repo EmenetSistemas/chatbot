@@ -3,7 +3,7 @@ const { addKeyword } = require("@bot-whatsapp/bot");
 const { normalizeString, obtenerZonasCobertura } = require("../../services/web.service");
 
 const flowCoberturaInternet = addKeyword('2', { sensitive: true })
-    .addAnswer('¿Qué te gustaría hacer?')
+    .addAnswer('🤖 ¿Qué te gustaría hacer?')
     .addAnswer(
         [
             '',

@@ -4,7 +4,7 @@ const { obtenerPlanesInternet, obtenerPlanPorId, normalizeString } = require("..
 
 const flowConsultaPlanes = addKeyword('1', { sensitive: true })
     .addAnswer(
-        'Los planes/paquetes de internet con los que contamos actualmente, son los siguientes:',
+        '🤖 Los planes/paquetes de internet con los que contamos actualmente, son los siguientes:',
         null,
         async (_, { flowDynamic }) => {
             const planes = await obtenerPlanesInternet();
@@ -29,7 +29,7 @@ const flowConsultaPlanes = addKeyword('1', { sensitive: true })
             if (isNaN(input)) {
                 await flowDynamic([
                     'Se debe colocar una opción válida',
-                    '¿Qué plan te interesa más?'
+                    '🤖 ¿Qué plan te interesa más?'
                 ]);
             } else {
                 const plan = await obtenerPlanPorId(input);
@@ -37,7 +37,7 @@ const flowConsultaPlanes = addKeyword('1', { sensitive: true })
                 if (!plan) {
                     await flowDynamic([
                         'No se encontró ningún plan con ese identificador.\nPor favor, introduce un identificador válido.',
-                        '¿Qué plan te interesa más?'
+                        '🤖 ¿Qué plan te interesa más?'
                     ]);
                 } else {
                     await flowDynamic(plan);

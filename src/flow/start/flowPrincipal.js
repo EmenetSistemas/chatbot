@@ -4,12 +4,13 @@ const { obtenerSaludo } = require('../../services/web.service');
 const { flowConsultaPlanes } = require('../web/flowConsultaPlanes');
 const { flowCoberturaInternet } = require('../web/flowCoberturaInternet');
 const { flowContratacion } = require('../web/flowContratacion');
+const { flowDefault } = require('./flowDefault');
 
-const flowPrincipal = addKeyword(['hola'])
+const flowPrincipal = addKeyword(['hola', 'menu'])
     .addAnswer(`🙌 Hola ${obtenerSaludo()}, bienvenido al 🤖 chatbot de *Emenet*`)
     .addAnswer(
         [
-            '¿En que puedo ayudarte el día de hoy?',
+            '🤖 ¿En que puedo ayudarte el día de hoy?',
             '',
             '1. Ver planes de internet',
             '2. Validar mi cobertura',
@@ -17,7 +18,7 @@ const flowPrincipal = addKeyword(['hola'])
         ],
         null,
         null,
-        [flowConsultaPlanes, flowCoberturaInternet, flowContratacion]
+        [flowConsultaPlanes, flowCoberturaInternet, flowContratacion, flowDefault]
     )
 
 module.exports = { flowPrincipal };

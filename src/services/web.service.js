@@ -348,6 +348,13 @@ const obtenerZonasCobertura = async (input) => {
         });
     });    
     if (coincidenciasParciales.length > 0) {
+        if (coincidenciasParciales.length == 1) {
+            return {
+                responseType: 1,
+                comunidad: coincidenciasParciales[0].comunidad,
+                mensaje: `En la comunidad de ${coincidenciasParciales[0].comunidad} sí contamos con cobertura de internet. Solo falta verificar la ubicación exacta de tu domicilio para que puedas agendar una instalación y disfrutar de nuestro excelente servicio.`
+            };
+        }
         return {
             responseType: 2,
             mensaje: formatarResultado(coincidenciasParciales),
