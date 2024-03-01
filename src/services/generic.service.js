@@ -1,5 +1,18 @@
 const { provider } = require('../shared/provider')
 
+const obtenerOpcionesFlujoPrincipal = async () => {
+    const opciones = [
+        '    *1.* Ver planes de internet',
+        '    *2.* Validar mi cobertura',
+        '    *3.* Conctactar con un asesor para contratar internet',
+        '    *4.* Realizar un pago de internet'
+    ];
+
+    const opcionesConSaltoInicial = [''].concat(opciones);
+
+    return opcionesConSaltoInicial.join('\n');
+}
+
 const crearMensajeConBotones = async (telefono, textoPrincipal, botones) => {
     const templateMessage = {
         text: textoPrincipal,
@@ -21,4 +34,4 @@ const crearMensajeConBotones = async (telefono, textoPrincipal, botones) => {
     await abc.sendMessage(telefono + '@c.us', templateMessage);
 }
 
-module.exports = { crearMensajeConBotones };
+module.exports = { obtenerOpcionesFlujoPrincipal, crearMensajeConBotones };
