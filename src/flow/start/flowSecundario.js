@@ -1,28 +1,14 @@
 const { addKeyword } = require("@bot-whatsapp/bot");
 
-const { flowConsultaPlanes } = require("../web/flowConsultaPlanes");
-const { flowCoberturaInternet } = require("../web/flowCoberturaInternet");
-const { flowContratacion } = require("../web/flowContratacion");
+const { crearMensajeConBotones } = require("../../services/generic.service");
 
 const flowSecundario = addKeyword(['no'], { sensitive: true })
-    .addAnswer(
-        [
-            'Opciones:',
-            '',
-            '1. Ver planes de internet',
-            '2. Validar mi cobertura',
-            '3. Conctactar con un asesor para contratar internet'
-        ],
-        null,
-        null,
-        [flowConsultaPlanes, flowCoberturaInternet, flowContratacion]
-    )
     .addAction(
         async ({ from }) => {
-            const botones = [
-                { textoBoton: 'Realizar un test de velocidad', url: 'https://emenet.m-net.mx/inicio#team' }
-            ];
-            await crearMensajeConBotones(from, '🤖 ¿En que más puedo ayudarte el día de hoy?', botones);
+            const mensaje = `🤖 ¿Algo más en lo que pueda ayudarte el día de hoy?\n\n1. Ver planes de internet\n2. Validar mi cobertura\n3. Conctactar con un asesor para contratar internet`
+            await crearMensajeConBotones(from, mensaje, [
+                { textoBoton: '🛜 Realiza un test de velocidad', url: 'https://emenet.m-net.mx/inicio#team' }
+            ]);
         }
     )
 
