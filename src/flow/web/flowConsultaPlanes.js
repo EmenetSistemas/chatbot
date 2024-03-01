@@ -1,43 +1,42 @@
 const { addKeyword } = require("@bot-whatsapp/bot");
 
 const { obtenerPlanesInternet, obtenerPlanPorId, normalizeString } = require("../../services/web.service");
+const { crearMensajeConBotones } = require("../../services/generic.service");
 
 const flowConsultaPlanes = addKeyword('1', { sensitive: true })
     .addAnswer(
         '🤖 Los planes/paquetes de internet con los que contamos actualmente, son los siguientes:',
         null,
-        async (_, { flowDynamic }) => {
+        async ({ from }, { flowDynamic }) => {
             const planes = await obtenerPlanesInternet();
-            await flowDynamic([planes, '¿Qué plan te interesa más?']);
+            await flowDynamic(planes);
+            await crearMensajeConBotones(from, '🤖 ¿Qué plan te interesa más?', [
+                { textoBoton: '📋 Volver al menú principal' }
+            ]);
         }
     )
-    .addAnswer(
-        [
-            '',
-            '- Coloque identificador del plan para saber más',
-            '- *Menu* para volver al menú principal'
-        ],
+    .addAction(
         { capture: true },
-        async ({ body }, { flowDynamic, gotoFlow, fallBack }) => {
-            const input = normalizeString(body);
-
-            if (input == 'menu') {
-                const { flowPrincipal } = require("../start/flowPrincipal");
-                return await gotoFlow(flowPrincipal);
+        async (ctx, { flowDynamic, gotoFlow, fallBack }) => {
+            if (ctx.body == '📋 Volver al menú principal') {
+                const { flowSecundario } = require("../start/flowSecundario");
+                return await gotoFlow(flowSecundario);
             }
 
+            const input = normalizeString(ctx.body);
+
             if (isNaN(input)) {
-                await flowDynamic([
-                    'Se debe colocar una opción válida',
-                    '🤖 ¿Qué plan te interesa más?'
+                await flowDynamic('Se debe colocar una opción válida');
+                await crearMensajeConBotones(ctx.from, '🤖 ¿Qué plan te interesa más?', [
+                    { textoBoton: '📋 Volver al menú principal' }
                 ]);
             } else {
                 const plan = await obtenerPlanPorId(input);
 
                 if (!plan) {
-                    await flowDynamic([
-                        'No se encontró ningún plan con ese identificador.\nPor favor, introduce un identificador válido.',
-                        '🤖 ¿Qué plan te interesa más?'
+                    await flowDynamic('No se encontró ningún plan con ese identificador.\nPor favor, introduce un identificador válido.');
+                    await crearMensajeConBotones(ctx.from, '🤖 ¿Qué plan te interesa más?', [
+                        { textoBoton: '📋 Volver al menú principal' }
                     ]);
                 } else {
                     await flowDynamic(plan);
