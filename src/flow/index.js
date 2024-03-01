@@ -6,6 +6,7 @@ const { flowDefault } = require("./start/flowDefault");
 const { flowConsultaPlanes } = require("./web/flowConsultaPlanes");
 const { flowCoberturaInternet } = require("./web/flowCoberturaInternet");
 const { flowContratacion } = require("./web/flowContratacion");
+const { flowPagoInternet } = require("./web/flowPagoInternet");
 
 const flow = createFlow(
     [
@@ -14,6 +15,7 @@ const flow = createFlow(
         flowConsultaPlanes,
         flowCoberturaInternet,
         flowContratacion,
+        flowPagoInternet,
         flowDefault
     ]
 );

@@ -367,7 +367,6 @@ const obtenerZonasCobertura = async (input) => {
     };
 };
 
-
 const formatarResultado = (coincidencias) => {
     return '\n' + coincidencias.map((item) => `${item.indice}. ${item.comunidad}`).join('\n');
 }
