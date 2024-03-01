@@ -323,7 +323,7 @@ const obtenerZonasCobertura = async (input) => {
         return {
             responseType: 1,
             comunidad: comExac.comunidad,
-            mensaje: `En la comunidad de ${comExac.comunidad} sí contamos con cobertura de internet. Solo falta verificar la ubicación exacta de tu domicilio para que puedas agendar una instalación y disfrutar de nuestro excelente servicio.`
+            mensaje: `En la comunidad de ${comExac.comunidad} sí contamos con cobertura de internet.\nSolo recuerde que aún que verificar la ubicación exacta de su domicilio para que pueda agendar una instalación y disfrutar de nuestro excelente servicio.`
         };
     }
 
@@ -336,7 +336,7 @@ const obtenerZonasCobertura = async (input) => {
         return {
             responseType: 1,
             comunidad: coincidenciasExactas[0].comunidad,
-            mensaje: `En la comunidad de ${coincidenciasExactas[0].comunidad} sí contamos con cobertura de internet. Solo falta verificar la ubicación exacta de tu domicilio para que puedas agendar una instalación y disfrutar de nuestro excelente servicio.`
+            mensaje: `En la comunidad de ${coincidenciasExactas[0].comunidad} sí contamos con cobertura de internet.\nSolo recuerde que aún que verificar la ubicación exacta de su domicilio para que pueda agendar una instalación y disfrutar de nuestro excelente servicio.`
         };
     }
 
@@ -352,7 +352,7 @@ const obtenerZonasCobertura = async (input) => {
             return {
                 responseType: 1,
                 comunidad: coincidenciasParciales[0].comunidad,
-                mensaje: `En la comunidad de ${coincidenciasParciales[0].comunidad} sí contamos con cobertura de internet. Solo falta verificar la ubicación exacta de tu domicilio para que puedas agendar una instalación y disfrutar de nuestro excelente servicio.`
+                mensaje: `En la comunidad de ${coincidenciasParciales[0].comunidad} sí contamos con cobertura de internet.\nSolo recuerde que aún que verificar la ubicación exacta de su domicilio para que pueda agendar una instalación y disfrutar de nuestro excelente servicio.`
             };
         }
         return {
