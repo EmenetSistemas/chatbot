@@ -9,7 +9,7 @@ let botones = [
     { textoBoton: '❌ Cancelar proceso' }
 ];
 
-const flowContratacion = addKeyword(['b', '3'], { sensitive: true })
+const flowContratacion = addKeyword('3', { sensitive: true })
     .addAnswer(
         [
             '🤖 Te solicitaré un par de datos necesarios para poder continuar con este proceso'
@@ -125,13 +125,25 @@ const flowContratacion = addKeyword(['b', '3'], { sensitive: true })
                 ]);
             }
 
+            if (ctx.body.includes('http') && ctx.body.includes('maps')) {
+                ubicacion = ctx.body;
+                await flowDynamic([
+                    'Gracias por compartirnos tu ubicación...',
+                    '📑 A continuación te comparto un resumen de la información compartida:',
+                    `*Nombre*:\n    - ${nombre}\n\n*Localidad*:\n    - ${localidad}\n\n${paquete}`
+                ]);
+
+                return await crearMensajeConBotones(ctx.from, '🤖 ¿La información es la correcta?', [
+                    { textoBoton: '✔️ Continuar con el proceso' },
+                    { textoBoton: '❌ Cancelar proceso' }
+                ]);
+            }
+
             const coordenadas = ctx.message.locationMessage;
 
             if (coordenadas) {
-                ubicacion = {
-                    lat: coordenadas.degreesLatitude,
-                    long: coordenadas.degreesLongitude
-                };
+                ubicacion = `https://www.google.es/maps?q=${coordenadas.degreesLatitude}, ${coordenadas.degreesLongitude}`;
+
                 await flowDynamic([
                     'Gracias por compartirnos tu ubicación...',
                     '📑 A continuación te comparto un resumen de la información compartida:',
