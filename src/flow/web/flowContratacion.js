@@ -1,28 +1,25 @@
 const { addKeyword } = require("@bot-whatsapp/bot");
 
 const { obtenerZonasCobertura, normalizeString, obtenerPlanPorId, obtenerPlanesInternet } = require("../../services/web.service");
-const { crearMensajeConBotones } = require("../../services/generic.service");
 
 let nombre, telefono, localidad, paquete, ubicacion;
-
-let botones = [
-    { textoBoton: '❌ Cancelar proceso' }
-];
 
 const flowContratacion = addKeyword('3', { sensitive: true })
     .addAnswer(
         [
-            '🤖 Te solicitaré un par de datos necesarios para poder continuar con este proceso'
-        ],
-        null,
-        async ({ from }) => {
-            return await crearMensajeConBotones(from, '🤖 ¿Cúal es tú nombre?', botones);
-        }
+            '🤖 Te solicitaré un par de datos necesarios para poder continuar con este proceso',
+            '',
+            '❌ Si deseas cancelar o salir de este proceso lo puedes realizar en cualquier momento colocando la palabra *cancelar*'
+        ]
     )
-    .addAction(
+    .addAnswer(
+        '🤖 ¿Cúal es tú nombre?',
         { capture: true },
         async (ctx, { flowDynamic, gotoFlow }) => {
-            if (ctx.body == '❌ Cancelar proceso') {
+
+            const input = normalizeString(ctx.body);
+
+            if (input == 'cancelar') {
                 const { flowSecundario } = require("../start/flowSecundario");
                 return await gotoFlow(flowSecundario);
             }
@@ -31,18 +28,18 @@ const flowContratacion = addKeyword('3', { sensitive: true })
             telefono = ctx.from;
 
             await flowDynamic('Mucho gusto ' + nombre + ', continuemos...');
-            await crearMensajeConBotones(telefono, '🤖 ¿Cuál es la localidad en donde vive?', botones);
         }
     )
-    .addAction(
+    .addAnswer(
+        '🤖 ¿Cuál es la localidad en donde vive?',
         { capture: true },
         async (ctx, { flowDynamic, fallBack, gotoFlow }) => {
-            if (ctx.body == '❌ Cancelar proceso') {
+            const input = normalizeString(ctx.body);
+
+            if (ctx.body == 'cancelar') {
                 const { flowSecundario } = require("../start/flowSecundario");
                 return await gotoFlow(flowSecundario);
             }
-
-            const input = normalizeString(ctx.body);
 
             const coberturas = await obtenerZonasCobertura(input);
 
@@ -57,17 +54,16 @@ const flowContratacion = addKeyword('3', { sensitive: true })
                     'No indetifico tú localidad, pero encontre localidades similares.\nPuedes colocar de nuevo tú la localidad si es que se encuentra en el siguiente listado:',
                     coberturas.mensaje
                 ]);
-                await crearMensajeConBotones(ctx.from, '🤖 ¿Cuál es la localidad en donde vive?', botones);
             }
 
             if (coberturas.responseType == 1) {
                 localidad = coberturas.comunidad;
                 const planes = await obtenerPlanesInternet();
-                await flowDynamic([
-                    'Excelente, en ' + localidad + ' contamos con cobertura\n\n🤖 Ahora, te comparto los planes con los que contamos actualmente:',
-                    planes
+                return await flowDynamic([
+                    '✔️ Excelente, en ' + localidad + ' contamos con cobertura 🛜\n\n🤖 Ahora, te comparto los planes con los que contamos actualmente:',
+                    planes,
+                    '🤖 ¿Cuál es el plan que te interesa más?'
                 ]);
-                return await crearMensajeConBotones(ctx.from, '🤖 ¿Cuál es el plan que te interesa más?', botones);
             }
 
             return await fallBack();
@@ -76,28 +72,25 @@ const flowContratacion = addKeyword('3', { sensitive: true })
     .addAction(
         { capture: true },
         async (ctx, { flowDynamic, gotoFlow, fallBack }) => {
-            if (ctx.body == '❌ Cancelar proceso') {
+            const input = normalizeString(ctx.body);
+
+            if (ctx.body == 'cancelar') {
                 const { flowSecundario } = require("../start/flowSecundario");
                 return await gotoFlow(flowSecundario);
             }
 
-            const input = normalizeString(ctx.body);
-
             if (isNaN(input)) {
                 await flowDynamic('Se debe colocar una opción válida');
-                await crearMensajeConBotones(ctx.from, '🤖 ¿Qué plan te interesa más?', botones);
             } else {
                 const plan = await obtenerPlanPorId(input);
 
                 if (!plan) {
                     await flowDynamic('No se encontró ningún plan con ese identificador.\nPor favor, introduce un identificador válido.');
-                    await crearMensajeConBotones(ctx.from, '🤖 ¿Qué plan te interesa más?', botones);
                 } else {
                     paquete = plan;
-                    await flowDynamic(plan);
-                    return await crearMensajeConBotones(ctx.from, '🤖 Ahora, ¿Podrías compartirme tu ubicación actual/fija?\n*(NOTA: UBICACIÓN ACTUAL/FIJA, NO EN TIEMPO REAL)* 🌎\nEsto con el fin de ubicar exactamente tu domicilio', [
-                        { textoBoton: '🌎 No me encuentro en mi domicilio' },
-                        ...botones
+                    return flowDynamic([
+                        plan,
+                        `🤖 Ahora, ¿Podrías compartirnos tu ubicación actual/fija?\n\n    *x.* Si no se encuentra en su domicilio o no tiene forma de enviar la ubicación\n\n*(NOTA: UBICACIÓN ACTUAL/FIJA, NO EN TIEMPO REAL)* 🌎`
                     ]);
                 }
             }
@@ -108,21 +101,20 @@ const flowContratacion = addKeyword('3', { sensitive: true })
     .addAction(
         { capture: true },
         async (ctx, { flowDynamic, gotoFlow, fallBack }) => {
-            if (ctx.body == '❌ Cancelar proceso') {
+            const input = normalizeString(ctx.body);
+
+            if (input == 'cancelar') {
                 const { flowSecundario } = require("../start/flowSecundario");
                 return await gotoFlow(flowSecundario);
             }
 
-            if (ctx.body == '🌎 No me encuentro en mi domicilio') {
+            if (input == 'x') {
                 await flowDynamic([
                     'De acuerdo, dejaremos esto para más tarde\n\n📑 A continuación te comparto un resumen de la información compartida:',
                     `*Nombre*:\n    👤 ${nombre}\n\n*Localidad*:\n    📍 ${localidad}\n\n${paquete}`
                 ]);
 
-                return await crearMensajeConBotones(ctx.from, '🤖 ¿La información es la correcta?', [
-                    { textoBoton: '✔️ Continuar con el proceso' },
-                    { textoBoton: '❌ Cancelar proceso' }
-                ]);
+                return await flowDynamic('🤖 ¿La información es la correcta?\n\n    a. Continuar con el proceso ✔️\n    b. Cancelar proceso ❌');
             }
 
             if (ctx.body.includes('http') && ctx.body.includes('maps')) {
@@ -133,10 +125,7 @@ const flowContratacion = addKeyword('3', { sensitive: true })
                     `*Nombre*:\n    - ${nombre}\n\n*Localidad*:\n    - ${localidad}\n\n${paquete}`
                 ]);
 
-                return await crearMensajeConBotones(ctx.from, '🤖 ¿La información es la correcta?', [
-                    { textoBoton: '✔️ Continuar con el proceso' },
-                    { textoBoton: '❌ Cancelar proceso' }
-                ]);
+                return await flowDynamic('🤖 ¿La información es la correcta?\n\n    a. Continuar con el proceso ✔️\n    b. Cancelar proceso ❌');
             }
 
             const coordenadas = ctx.message.locationMessage;
@@ -150,30 +139,25 @@ const flowContratacion = addKeyword('3', { sensitive: true })
                     `*Nombre*:\n    - ${nombre}\n\n*Localidad*:\n    - ${localidad}\n\n${paquete}`
                 ]);
 
-                return await crearMensajeConBotones(ctx.from, '🤖 ¿La información es la correcta?', [
-                    { textoBoton: '✔️ Continuar con el proceso' },
-                    { textoBoton: '❌ Cancelar proceso' }
-                ]);
+                return await flowDynamic('🤖 ¿La información es la correcta?\n\n    a. Continuar con el proceso ✔️\n    b. Cancelar proceso ❌');
             }
 
-            await crearMensajeConBotones(ctx.from, 'No es lo que se esperaba.\n\n¿Podría compartirnos su ubicación actual/fija?\nEsto con el fin de ubicar exactamente tu domicilio', [
-                { textoBoton: '🌎 No me encuentro en mi domicilio' },
-                ...botones
-            ]);
+            await flowDynamic('No es lo que se esperaba.\n\n¿Podrías compartirnos tu ubicación actual/fija?\n\n    *x.* Si no se encuentra en su domicilio o no tiene forma de enviar la ubicación\n\n*(NOTA: UBICACIÓN ACTUAL/FIJA, NO EN TIEMPO REAL)* 🌎');
             return await fallBack();
         }
     )
     .addAction(
         { capture: true },
         async ({ body }, { flowDynamic, gotoFlow, fallBack }) => {
-            if (body == '✔️ Continuar con el proceso') {
+            const input = normalizeString(body);
+            if (input == 'a') {
                 return flowDynamic([
                     '🤖 Muy bien, gracias por apoyarnos con tu información\n\nRecuerde que para confirmar 100% la cobertura en su domicilio es necesario el estudio que realizará el asesor',
                     'En los próximos minutos uno de nuestros asesores 🧑🏻‍💻 se podrá en contacto contigo para concluir con este proceso, por favor espere...'
                 ]);
             }
 
-            if (body == '❌ Cancelar proceso') {
+            if (input == 'b') {
                 const { flowSecundario } = require("../start/flowSecundario");
                 return await gotoFlow(flowSecundario);
             }

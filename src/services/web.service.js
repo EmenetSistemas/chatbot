@@ -270,11 +270,11 @@ const obtenerSaludo = () => {
     } else {
         return 'buenas noches';
     }
-}
+};
 
 const normalizeString = (str) => {
     return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().replace(/[^\w\s]/gi, '').replace(/ñ/g, 'n');
-}
+};
 
 const obtenerPlanesInternet = async () => {
     try {
@@ -369,7 +369,7 @@ const obtenerZonasCobertura = async (input) => {
 
 const formatarResultado = (coincidencias) => {
     return '\n' + coincidencias.map((item) => `${item.indice}. ${item.comunidad}`).join('\n');
-}
+};
 
 module.exports = {
     obtenerSaludo,

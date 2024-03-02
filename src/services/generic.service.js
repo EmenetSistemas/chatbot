@@ -1,6 +1,6 @@
 const { provider } = require('../shared/provider');
 
-const obtenerOpcionesFlujoPrincipal = async () => {
+const obtenerOpcionesFlujoPrincipal = () => {
     const opciones = [
         '    *1.* Ver planes de internet',
         '    *2.* Validar mi cobertura',
