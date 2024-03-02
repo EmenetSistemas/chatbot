@@ -306,7 +306,7 @@ const obtenerPlanPorId = async (id) => {
         const periodo = planEncontrado.mensualidad ? 'al mes' : 'al año';
         const servicios = planEncontrado.caracteristicas.map((element, index) => `    ${index + 1}. ${element.nombre}`).join('\n');
 
-        const mensaje = `*Plan seleccionado:*\n- ${(planEncontrado.tipoPlan == 1 ? 'P#' : 'PQ#') + planEncontrado.pkTblPlan} - (*${planEncontrado.plan}* x *${planEncontrado.mensualidad ?? planEncontrado.anualidad}* ${periodo})\n\n*Servicios:*\n${servicios}\n\n*Recomendaciones:*\n- Dispositivos conectados simultaneamente: *${planEncontrado.dispositivosSimultaneos}*\n- Estudio / trabajo en casa simultáneamente: *${planEncontrado.estudioTrabajo}*\n- Reproducción de video: *${planEncontrado.reproduccionVideo}*\n- Juego en línea: *${planEncontrado.juegoLinea}*\n- Transmisiones en vivo: *${planEncontrado.transmisiones}*`;
+        const mensaje = `*Plan seleccionado:* 🛜\n- ${(planEncontrado.tipoPlan == 1 ? 'P#' : 'PQ#') + planEncontrado.pkTblPlan} - (*${planEncontrado.plan}* x *${planEncontrado.mensualidad ?? planEncontrado.anualidad}* ${periodo})\n\n*Servicios:* 📋\n${servicios}\n\n*Recomendaciones:* ✔️\n- Dispositivos conectados simultaneamente: *${planEncontrado.dispositivosSimultaneos}*\n- Estudio / trabajo en casa simultáneamente: *${planEncontrado.estudioTrabajo}*\n- Reproducción de video: *${planEncontrado.reproduccionVideo}*\n- Juego en línea: *${planEncontrado.juegoLinea}*\n- Transmisiones en vivo: *${planEncontrado.transmisiones}*`;
 
         return mensaje;
     } catch (error) {

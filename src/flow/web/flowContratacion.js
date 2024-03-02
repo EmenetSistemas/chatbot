@@ -2,7 +2,7 @@ const { addKeyword } = require("@bot-whatsapp/bot");
 
 const { obtenerZonasCobertura, normalizeString, obtenerPlanPorId, obtenerPlanesInternet } = require("../../services/web.service");
 
-let nombre, telefono, localidad, paquete, ubicacion;
+let nombre, telefono, localidad, paquete, ubicacion, caracteristicasDomicilio;
 
 const flowContratacion = addKeyword('3', { sensitive: true })
     .addAnswer(
@@ -109,23 +109,16 @@ const flowContratacion = addKeyword('3', { sensitive: true })
             }
 
             if (input == 'x') {
-                await flowDynamic([
-                    'De acuerdo, dejaremos esto para más tarde\n\n📑 A continuación te comparto un resumen de la información compartida:',
-                    `*Nombre*:\n    👤 ${nombre}\n\n*Localidad*:\n    📍 ${localidad}\n\n${paquete}`
-                ]);
-
-                return await flowDynamic('🤖 ¿La información es la correcta?\n\n    a. Continuar con el proceso ✔️\n    b. Cancelar proceso ❌');
+                return await flowDynamic('De acuerdo, dejaremos esto para más tarde\n\n📑 Ahora, ¿pordrías compartirme algunas características de tu domicilio?, para poder identificarlo mejor');
             }
 
             if (ctx.body.includes('http') && ctx.body.includes('maps')) {
                 ubicacion = ctx.body;
-                await flowDynamic([
-                    'Gracias por compartirnos tu ubicación...',
-                    '📑 A continuación te comparto un resumen de la información compartida:',
-                    `*Nombre*:\n    - ${nombre}\n\n*Localidad*:\n    - ${localidad}\n\n${paquete}`
-                ]);
 
-                return await flowDynamic('🤖 ¿La información es la correcta?\n\n    a. Continuar con el proceso ✔️\n    b. Cancelar proceso ❌');
+                return await flowDynamic([
+                    'Gracias por compartirnos tu ubicación...',
+                    '📑 Ahora, ¿pordrías compartirme algunas características de tu domicilio?, para poder identificarlo mejor'
+                ]);
             }
 
             const coordenadas = ctx.message.locationMessage;
@@ -133,17 +126,36 @@ const flowContratacion = addKeyword('3', { sensitive: true })
             if (coordenadas) {
                 ubicacion = `https://www.google.es/maps?q=${coordenadas.degreesLatitude}, ${coordenadas.degreesLongitude}`;
 
-                await flowDynamic([
+                return await flowDynamic([
                     'Gracias por compartirnos tu ubicación...',
-                    '📑 A continuación te comparto un resumen de la información compartida:',
-                    `*Nombre*:\n    - ${nombre}\n\n*Localidad*:\n    - ${localidad}\n\n${paquete}`
+                    '📑 Ahora, ¿pordrías compartirme algunas características de tu domicilio?, para poder identificarlo mejor'
                 ]);
-
-                return await flowDynamic('🤖 ¿La información es la correcta?\n\n    a. Continuar con el proceso ✔️\n    b. Cancelar proceso ❌');
             }
 
             await flowDynamic('No es lo que se esperaba.\n\n¿Podrías compartirnos tu ubicación actual/fija?\n\n    *x.* Si no se encuentra en su domicilio o no tiene forma de enviar la ubicación\n\n*(NOTA: UBICACIÓN ACTUAL/FIJA, NO EN TIEMPO REAL)* 🌎');
             return await fallBack();
+        }
+    )
+    .addAction(
+        { capture: true },
+        async ({ body }, { flowDynamic, gotoFlow }) => {
+            const input = normalizeString(body);
+
+            if (input == 'cancelar') {
+                const { flowSecundario } = require("../start/flowSecundario");
+                return await gotoFlow(flowSecundario);
+            }
+
+            caracteristicasDomicilio = body;
+            const mensaje = ubicacion ?
+                `*Nombre*:\n    👤 ${nombre}\n\n*Localidad*:\n    📍 ${localidad}\n\n*Domicilio*:\n🧭 ${ubicacion}\n\n*Características*:\n\n${caracteristicasDomicilio}\n\n${paquete}` :
+                `*Nombre*:\n    👤 ${nombre}\n\n*Localidad*:\n    📍 ${localidad}\n\n*Características*: 📑\n\n${caracteristicasDomicilio}\n\n${paquete}`;
+
+            return await flowDynamic([
+                '📑 A continuación te comparto un resumen de la información compartida:',
+                mensaje,
+                '🤖 ¿La información es la correcta?\n\n    a. Continuar con el proceso ✔️\n    b. Cancelar proceso ❌'
+            ]);
         }
     )
     .addAction(
