@@ -1,27 +1,22 @@
 const { addKeyword } = require("@bot-whatsapp/bot");
 
 const { normalizeString, obtenerZonasCobertura } = require("../../services/web.service");
-const { crearMensajeConBotones } = require("../../services/generic.service");
-
-const buttons = [
-    { textoBoton: '📋 Volver al menú principal' }
-];
 
 const flowCoberturaInternet = addKeyword('2', { sensitive: true })
-    .addAction(
-        async ({ from }) => {
-            await crearMensajeConBotones(from, '🤖 ¿Cuál es la localidad donde se encuentra su domicilio?', buttons);
-        }
-    )
-    .addAction(
+    .addAnswer(
+        [
+            '🤖 ¿Cuál es la localidad donde se encuentra su domicilio?',
+            '',
+            '- *Menú*, si desea volver al menú principal 📋'
+        ],
         { capture: true },
         async (ctx, { flowDynamic, fallBack, gotoFlow }) => {
-            if (ctx.body == '📋 Volver al menú principal') {
+            const input = normalizeString(ctx.body);
+
+            if (input == 'menu') {
                 const { flowSecundario } = require("../start/flowSecundario");
                 return await gotoFlow(flowSecundario);
             }
-
-            const input = normalizeString(ctx.body);
 
             const coberturas = await obtenerZonasCobertura(input);
 
@@ -44,7 +39,6 @@ const flowCoberturaInternet = addKeyword('2', { sensitive: true })
                 return await gotoFlow(flowSecundario);
             }
 
-            await crearMensajeConBotones(ctx.from, '🤖 ¿Cuál es la localidad donde se encuentra su domicilio?', buttons);
             return fallBack();
         }
     )
