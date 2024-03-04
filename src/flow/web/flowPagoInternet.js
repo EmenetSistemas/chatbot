@@ -1,5 +1,4 @@
 const { addKeyword } = require("@bot-whatsapp/bot");
-const { crearMensajeConBotones } = require("../../services/generic.service");
 
 const flowPagoInternet = addKeyword('4', { sensitive: true })
     .addAnswer([
@@ -38,7 +37,11 @@ const flowPagoInternet = addKeyword('4', { sensitive: true })
             '',
             '🤖 Si se realiza el pago por transferencia o pago en ventanilla es necesario enviar por este medio una 📸 captura/foto del comprobante de pago, colocando además a nombre de quien está el servicio 👤'
         ],
-        { media: 'https://galasoftsolutions.com/datosCuenta.jpg' }
+        { media: 'https://galasoftsolutions.com/datosCuenta.jpg' },
+        async (_, { gotoFlow }) => {
+            const { flowSecundario } = require("../start/flowSecundario");
+            return await gotoFlow(flowSecundario);
+        }
     )
 
 module.exports = { flowPagoInternet };

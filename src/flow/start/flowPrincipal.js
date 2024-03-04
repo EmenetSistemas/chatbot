@@ -14,7 +14,8 @@ const flowPrincipal = addKeyword(['hola', 'menu'])
         [
             `🤖 ¿En que puedo ayudarte el día de hoy?\n${obtenerOpcionesFlujoPrincipal()}`,
             '',
-            'Realice un test de velicidad en el siguiente link: https://emenet.m-net.mx/inicio#team'
+            'Visita nuestra página:\nhttps://m-net.mx/',
+            'Realice un test de velicidad:\nhttps://emenet.m-net.mx/inicio#team'
         ],
         null,
         null,
