@@ -10,10 +10,7 @@ const { obtenerOpcionesFlujoPrincipal } = require("../../services/generic.servic
 const flowSecundario = addKeyword(['no'], { sensitive: true })
     .addAnswer(
         [
-            `🤖 ¿Algo más en lo que pueda ayudarte el día de hoy?\n${obtenerOpcionesFlujoPrincipal()}`,
-            '',
-            'Visita nuestra página:\nhttps://m-net.mx/',
-            'Realice un test de velicidad:\nhttps://emenet.m-net.mx/inicio#team'
+            `🤖 ¿Algo más en lo que pueda ayudarte el día de hoy?\n${obtenerOpcionesFlujoPrincipal()}`
         ],
         null,
         null,
