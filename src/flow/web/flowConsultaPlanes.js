@@ -4,7 +4,7 @@ const { obtenerPlanesInternet, obtenerPlanPorId, normalizeString } = require("..
 
 const flowConsultaPlanes = addKeyword('1', { sensitive: true })
     .addAnswer(
-        '🤖 Los planes/paquetes de internet con los que contamos actualmente, son los siguientes:',
+        '🛜 Los planes/paquetes de internet con los que contamos actualmente, son los siguientes:',
         null,
         async (_, { flowDynamic }) => {
             return await flowDynamic(await obtenerPlanesInternet());
