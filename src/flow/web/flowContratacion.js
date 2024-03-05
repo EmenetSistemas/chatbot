@@ -13,10 +13,9 @@ const flowContratacion = addKeyword('3', { sensitive: true })
         ]
     )
     .addAnswer(
-        '🤖 ¿Cúal es tú nombre?',
+        '🤖 ¿Cúal es tú nombre completo?',
         { capture: true },
         async (ctx, { flowDynamic, gotoFlow }) => {
-
             const input = normalizeString(ctx.body);
 
             if (input == 'cancelar') {

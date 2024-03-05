@@ -10,7 +10,11 @@ const flowPagoInternet = addKeyword('4', { sensitive: true })
         'Para que pueda realizar el pago de su servicio contamos con las siguientes opciones:'
     ])
     .addAnswer(
-        '🌎 *Pago directo en sucursales autorizadas*',
+        [
+            '🌎 *Pago directo en sucursales autorizadas*',
+            '',
+            'Horarios de atención\n- Lunes a Viernes (9:00 AM - 6:00 PM)\n- Sábado (9:00 AM - 3:00 PM)'
+        ],
         null,
         async ({ from }, { flowDynamic, provider }) => {
             const abc = await provider.getInstance();
@@ -37,7 +41,7 @@ const flowPagoInternet = addKeyword('4', { sensitive: true })
             '',
             '🤖 Si se realiza el pago por transferencia o pago en ventanilla es necesario enviar por este medio una 📸 captura/foto del comprobante de pago, colocando además a nombre de quien está el servicio 👤'
         ],
-        { media: 'https://galasoftsolutions.com/datosCuenta.jpg' },
+        { media: 'https://m-net.mx/Emenet_Internet/documentos/cuenta.jpg' },
         async (_, { gotoFlow }) => {
             const { flowSecundario } = require("../start/flowSecundario");
             return await gotoFlow(flowSecundario);
