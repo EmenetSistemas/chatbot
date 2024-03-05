@@ -7,10 +7,7 @@ const flowConsultaPlanes = addKeyword('1', { sensitive: true })
         '🛜 Los planes/paquetes de internet con los que contamos actualmente, son los siguientes:',
         null,
         async (_, { flowDynamic }) => {
-            return await flowDynamic([
-                await obtenerPlanesInternet(),
-                'El costo base de instalación es de 💵 $500.00 pesos, el aumento del mismo va depender de la distancia de la caja más cercana hasta su domicilio 📍'
-            ]);
+            return await flowDynamic(await obtenerPlanesInternet());
         }
     )
     .addAnswer(

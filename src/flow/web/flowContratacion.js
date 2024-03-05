@@ -27,7 +27,7 @@ const flowContratacion = addKeyword('3', { sensitive: true })
             nombre = ctx.body;
             telefono = ctx.from;
 
-            await flowDynamic('Mucho gusto ' + nombre + ', continuemos...');
+            await flowDynamic('Mucho gusto *' + nombre + '*, continuemos...');
         }
     )
     .addAnswer(
@@ -60,8 +60,8 @@ const flowContratacion = addKeyword('3', { sensitive: true })
                 localidad = coberturas.comunidad;
                 const planes = await obtenerPlanesInternet();
                 return await flowDynamic([
-                    '✔️ Excelente, en ' + localidad + ' contamos con cobertura 🛜\n\n🤖 Ahora, te comparto los planes con los que contamos actualmente:',
-                    planes,
+                    '✔️ Excelente, en *' + localidad + '* contamos con cobertura 🛜\n\n🤖 Ahora, te comparto los planes con los que contamos actualmente:',
+                    ...planes,
                     '🤖 ¿Cuál es el plan que te interesa más?'
                 ]);
             }

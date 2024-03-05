@@ -294,7 +294,10 @@ const obtenerPlanesInternet = async () => {
             return `${item.pkTblPlan}. *${item.plan}* x *${pago}* ${periodo}`;
         }).join('\n');
 
-        return mensajes;
+        return [
+            mensajes,
+            'El costo base de instalación es de 💵 $500.00 pesos, el aumento del mismo va depender de la distancia de la caja más cercana hasta su domicilio 📍'
+        ];
     } catch (error) {
         return 'Upss...! Ocurrió un error inesperado, por favor intenta nuevamente';
     }
