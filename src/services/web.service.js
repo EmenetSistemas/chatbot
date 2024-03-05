@@ -276,6 +276,12 @@ const normalizeString = (str) => {
     return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().replace(/[^\w\s]/gi, '').replace(/ñ/g, 'n');
 };
 
+const formatter = new Intl.NumberFormat('es-MX', {
+    style: 'currency',
+    currency: 'MXN',
+    minimumFractionDigits: 2
+});
+
 const obtenerPlanesInternet = async () => {
     try {
         const response = await axios.get(`${url}internet/planes`);
@@ -283,7 +289,9 @@ const obtenerPlanesInternet = async () => {
 
         const mensajes = '\n' + objPlanes.map(item => {
             const periodo = item.mensualidad ? 'al mes' : 'al año';
-            return `${item.pkTblPlan}. *${item.plan}* x *${item.mensualidad ?? item.anualidad}* ${periodo}`;
+            const pago = formatter.format(item.mensualidad ?? item.anualidad);
+
+            return `${item.pkTblPlan}. *${item.plan}* x *${pago}* ${periodo}`;
         }).join('\n');
 
         return mensajes;
@@ -299,14 +307,13 @@ const obtenerPlanPorId = async (id) => {
 
         const planEncontrado = objPlanes.find(plan => plan.pkTblPlan == id);
 
-        if (!planEncontrado) {
-            return null;
-        }
+        if (!planEncontrado) return null;
 
         const periodo = planEncontrado.mensualidad ? 'al mes' : 'al año';
         const servicios = planEncontrado.caracteristicas.map((element, index) => `    ${index + 1}. ${element.nombre}`).join('\n');
+        const pago = formatter.format(planEncontrado.mensualidad ?? planEncontrado.anualidad);
 
-        const mensaje = `*Plan seleccionado:* 🛜\n- ${(planEncontrado.tipoPlan == 1 ? 'P#' : 'PQ#') + planEncontrado.pkTblPlan} - (*${planEncontrado.plan}* x *${planEncontrado.mensualidad ?? planEncontrado.anualidad}* ${periodo})\n\n*Servicios:* 📋\n${servicios}\n\n*Recomendaciones:* ✔️\n- Dispositivos conectados simultaneamente: *${planEncontrado.dispositivosSimultaneos}*\n- Estudio / trabajo en casa simultáneamente: *${planEncontrado.estudioTrabajo}*\n- Reproducción de video: *${planEncontrado.reproduccionVideo}*\n- Juego en línea: *${planEncontrado.juegoLinea}*\n- Transmisiones en vivo: *${planEncontrado.transmisiones}*`;
+        const mensaje = `*Plan seleccionado:* 🛜\n- ${(planEncontrado.tipoPlan == 1 ? 'P#' : 'PQ#') + planEncontrado.pkTblPlan} - (*${planEncontrado.plan}* x *${pago}* ${periodo})\n\n*Servicios:* 📋\n${servicios}\n\n*Recomendaciones:* ✔️\n- Dispositivos conectados simultaneamente: *${planEncontrado.dispositivosSimultaneos}*\n- Estudio / trabajo en casa simultáneamente: *${planEncontrado.estudioTrabajo}*\n- Reproducción de video: *${planEncontrado.reproduccionVideo}*\n- Juego en línea: *${planEncontrado.juegoLinea}*\n- Transmisiones en vivo: *${planEncontrado.transmisiones}*`;
 
         return mensaje;
     } catch (error) {
