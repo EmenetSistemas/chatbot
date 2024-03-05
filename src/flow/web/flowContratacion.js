@@ -90,7 +90,7 @@ const flowContratacion = addKeyword('3', { sensitive: true })
                     paquete = plan;
                     return flowDynamic([
                         plan,
-                        `🤖 Ahora, ¿Podrías compartirnos tu ubicación actual/fija?\n\n    *x.* Si no se encuentra en su domicilio o no tiene forma de enviar la ubicación\n\n*(NOTA: UBICACIÓN ACTUAL/FIJA, NO EN TIEMPO REAL)* 🌎`
+                        '🤖 Ahora, ¿Podrías compartirnos tu ubicación actual/fija?\n\n*(NOTA: UBICACIÓN ACTUAL/FIJA, NO EN TIEMPO REAL)* 🌎\n\n*X* Si no se encuentra en su domicilio o no tiene forma de enviar la ubicación'
                     ]);
                 }
             }
@@ -109,7 +109,7 @@ const flowContratacion = addKeyword('3', { sensitive: true })
             }
 
             if (input == 'x') {
-                return await flowDynamic('De acuerdo, dejaremos esto para más tarde\n\n📑 Ahora, ¿pordrías compartirme algunas características de tu domicilio?, para poder identificarlo mejor');
+                return await flowDynamic('De acuerdo, dejaremos esto para más tarde\n\n🤖 Ahora, ¿pordrías compartirme algunas características de tu domicilio? 📑, para poder identificarlo mejor');
             }
 
             if (ctx.body.includes('http') && ctx.body.includes('maps')) {
@@ -117,7 +117,7 @@ const flowContratacion = addKeyword('3', { sensitive: true })
 
                 return await flowDynamic([
                     'Gracias por compartirnos tu ubicación...',
-                    '📑 Ahora, ¿pordrías compartirme algunas características de tu domicilio?, para poder identificarlo mejor'
+                    '🤖 Ahora, ¿pordrías compartirme algunas características de tu domicilio? 📑, para poder identificarlo mejor'
                 ]);
             }
 
@@ -128,11 +128,11 @@ const flowContratacion = addKeyword('3', { sensitive: true })
 
                 return await flowDynamic([
                     'Gracias por compartirnos tu ubicación...',
-                    '📑 Ahora, ¿pordrías compartirme algunas características de tu domicilio?, para poder identificarlo mejor'
+                    '🤖 Ahora, ¿pordrías compartirme algunas características de tu domicilio? 📑, para poder identificarlo mejor'
                 ]);
             }
 
-            await flowDynamic('No es lo que se esperaba.\n\n¿Podrías compartirnos tu ubicación actual/fija?\n\n    *x.* Si no se encuentra en su domicilio o no tiene forma de enviar la ubicación\n\n*(NOTA: UBICACIÓN ACTUAL/FIJA, NO EN TIEMPO REAL)* 🌎');
+            await flowDynamic('No es lo que se esperaba.\n\n¿Podrías compartirnos tu ubicación actual/fija?\n\n*(NOTA: UBICACIÓN ACTUAL/FIJA, NO EN TIEMPO REAL)* 🌎\n\n*X* Si no se encuentra en su domicilio o no tiene forma de enviar la ubicación');
             return await fallBack();
         }
     )
@@ -152,7 +152,7 @@ const flowContratacion = addKeyword('3', { sensitive: true })
                 `*Nombre*:\n    👤 ${nombre}\n\n*Localidad*:\n    📍 ${localidad}\n\n*Características*: 📑\n\n${caracteristicasDomicilio}\n\n${paquete}`;
 
             return await flowDynamic([
-                '📑 A continuación te comparto un resumen de la información compartida:',
+                '🤖 A continuación te comparto un resumen de la información compartida:',
                 mensaje,
                 '🤖 ¿La información es la correcta?\n\n    a. Continuar con el proceso ✔️\n    b. Cancelar proceso ❌'
             ]);
