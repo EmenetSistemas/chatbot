@@ -10,6 +10,9 @@ const flowRegistrarComprobantePago = addKeyword('5', { sensitive: true })
         '🤖 Por favor envíe la captura o foto de su comprobante de pago',
         { capture: true },
         async (ctx, { flowDynamic, fallBack }) => {
+            //await provider.sendMessage(ctx.from+'@c.us', 'Gracias por enviar la imagen', { replyTo: ctx.key.id });
+            //await provider.sendMessage(ctx.from+'@c.us', 'Gracias por enviar la imagen', { quoted: ctx.key.id });
+
             const imagen = ctx.message.imageMessage;
 
             if (!imagen) {
@@ -28,8 +31,9 @@ const flowRegistrarComprobantePago = addKeyword('5', { sensitive: true })
     )
     .addAction(
         { capture: true },
-        async ({ body }, { flowDynamic, gotoFlow }) => {
-            const nombreServicio = body;
+        async (ctx, { flowDynamic, gotoFlow }) => {
+            const contactoCliente = ctx.from;
+            const nombreServicio = ctx.body;
             
             //proceso registrar pago
 
