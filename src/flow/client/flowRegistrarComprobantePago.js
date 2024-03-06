@@ -1,5 +1,9 @@
+const fs = require('fs');
+
 const { addKeyword } = require("@bot-whatsapp/bot");
-const { capturarImagen } = require("../../services/generic.service");
+const { downloadMediaMessage } = require("@whiskeysockets/baileys");
+
+let img64;
 
 const flowRegistrarComprobantePago = addKeyword('5', { sensitive: true })
     .addAnswer(
@@ -13,6 +17,9 @@ const flowRegistrarComprobantePago = addKeyword('5', { sensitive: true })
                 return await fallBack();
             }
 
+            const buffer = await downloadMediaMessage(ctx, "buffer");
+            img64 = buffer.toString('base64');
+
             return await flowDynamic([
                 'Se capturó tu comprobante de pago',
                 '🤖 Ahora, ¿A nombre de quien se encuentra el servicio?'
@@ -22,8 +29,12 @@ const flowRegistrarComprobantePago = addKeyword('5', { sensitive: true })
     .addAction(
         { capture: true },
         async ({ body }, { flowDynamic, gotoFlow }) => {
-            await flowDynamic('🤖 Excelente, gracias por compartirnos la información, está será validada 🧑🏻‍💻 para poder ser aprobada, posterior a eso te enviaremos tu comprobante lo antes posible 📑');
+            const nombreServicio = body;
             
+            //proceso registrar pago
+
+            await flowDynamic('🤖 Excelente, gracias por compartirnos la información, está será validada 🧑🏻‍💻 para poder ser aprobada, posterior a eso te enviaremos tu comprobante lo antes posible 📑');
+
             const { flowSecundario } = require("../start/flowSecundario");
             return await gotoFlow(flowSecundario);
         }
