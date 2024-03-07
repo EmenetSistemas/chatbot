@@ -1,7 +1,6 @@
-const fs = require('fs');
-
 const { addKeyword } = require("@bot-whatsapp/bot");
 const { downloadMediaMessage } = require("@whiskeysockets/baileys");
+const { registrarComprobantePago } = require("../../services/client.service");
 
 let img64;
 
@@ -32,10 +31,20 @@ const flowRegistrarComprobantePago = addKeyword('5', { sensitive: true })
     .addAction(
         { capture: true },
         async (ctx, { flowDynamic, gotoFlow }) => {
-            const contactoCliente = ctx.from;
-            const nombreServicio = ctx.body;
-            
-            //proceso registrar pago
+            const data = {
+                nombreServicio  : ctx.body,
+                numeroContacto  : ctx.from,
+                comprobantePago : img64
+            };
+
+            const errorPeticion = await registrarComprobantePago(data);
+
+            if (errorPeticion) {
+                await flowDynamic('Upss...! Al parecer ocurrió un error al registrar tu información, ¿podrías intentar nuevamente?');
+
+                const { flowSecundario } = require("../start/flowSecundario");
+                return await gotoFlow(flowSecundario);
+            }
 
             await flowDynamic('🤖 Excelente, gracias por compartirnos la información, está será validada 🧑🏻‍💻 para poder ser aprobada, posterior a eso te enviaremos tu comprobante lo antes posible 📑');
 
