@@ -1,26 +1,28 @@
 const { addKeyword } = require("@bot-whatsapp/bot");
 const { downloadMediaMessage } = require("@whiskeysockets/baileys");
-const { registrarComprobantePago } = require("../../services/client.service");
+const { registrarComprobantePago, detectFileType } = require("../../services/client.service");
 
-let img64;
+let file, typeFile = 'unknown';
 
 const flowRegistrarComprobantePago = addKeyword('5', { sensitive: true })
     .addAnswer(
         '🤖 Por favor envíe la captura o foto de su comprobante de pago',
         { capture: true },
         async (ctx, { flowDynamic, fallBack }) => {
-            //await provider.sendMessage(ctx.from+'@c.us', 'Gracias por enviar la imagen', { replyTo: ctx.key.id });
-            //await provider.sendMessage(ctx.from+'@c.us', 'Gracias por enviar la imagen', { quoted: ctx.key.id });
+            try {
+                const buffer = await downloadMediaMessage(ctx, "buffer");
+                file = buffer.toString('base64');
 
-            const imagen = ctx.message.imageMessage;
+                typeFile = detectFileType(file);
 
-            if (!imagen) {
-                await flowDynamic('No es lo que se esperaba');
+                if (typeFile == 'unknown') {
+                    await flowDynamic('No es un tipo de archivo válido');
+                    return await fallBack();
+                }
+            } catch (e) {
+                await flowDynamic('No es un tipo de archivo válido');
                 return await fallBack();
             }
-
-            const buffer = await downloadMediaMessage(ctx, "buffer");
-            img64 = buffer.toString('base64');
 
             return await flowDynamic([
                 'Se capturó tu comprobante de pago',
@@ -32,9 +34,10 @@ const flowRegistrarComprobantePago = addKeyword('5', { sensitive: true })
         { capture: true },
         async (ctx, { flowDynamic, gotoFlow }) => {
             const data = {
-                nombreServicio  : ctx.body,
-                numeroContacto  : ctx.from,
-                comprobantePago : img64
+                nombreServicio: ctx.body,
+                numeroContacto: ctx.from,
+                comprobantePago: file,
+                tipoArchivoComprobante: typeFile
             };
 
             const errorPeticion = await registrarComprobantePago(data);
