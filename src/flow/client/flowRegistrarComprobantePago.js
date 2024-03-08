@@ -14,7 +14,6 @@ const flowRegistrarComprobantePago = addKeyword('5', { sensitive: true })
                 file = buffer.toString('base64');
 
                 typeFile = detectFileType(file);
-
                 if (typeFile == 'unknown') {
                     await flowDynamic('No es un tipo de archivo válido');
                     return await fallBack();

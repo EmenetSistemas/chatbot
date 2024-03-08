@@ -17,6 +17,8 @@ const detectFileType = (base64Data) => {
     const header = base64Data.substring(0, 16);
 
     const fileTypePatterns = {
+        'application/pdf': /^JVBERi/, // PDF
+        'application/vnd.openxmlformats-officedocument.wordprocessingml.document': /^UEsDBBQABgAIAAAAIQDf1K8/, // Word
         'image/jpeg': /^\/9j\/|^JVBER/, // JPEG
         'image/png': /^iVBORw/, // PNG
         'image/webp': /^UklGR/, // WebP
@@ -26,13 +28,11 @@ const detectFileType = (base64Data) => {
         'image/svg+xml': /^PHN2Z/, // SVG
         'image/jpeg': /^\/9j\/|^JVBER/, // JPEG
         'image/png': /^iVBORw/, // PNG
-        'pdf': /^JVBERi/, // PDF
-        'word': /^UEsDBBQABgAIAAAAIQDf1K8/ // Word
     };
 
     for (const [type, pattern] of Object.entries(fileTypePatterns)) {
         if (pattern.test(header)) {
-            return type.split('/')[0];
+            return type;
         }
     }
 
