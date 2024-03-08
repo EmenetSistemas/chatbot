@@ -15,7 +15,6 @@ const registrarComprobantePago = async (data, errorPeticion = false) => {
 
 const detectFileType = (base64Data) => {
     const header = base64Data.substring(0, 16);
-    console.log(header);
 
     const fileTypePatterns = {
         'application/pdf': /^JVBERi/, // PDF
