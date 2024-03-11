@@ -1,6 +1,7 @@
 const { addKeyword } = require("@bot-whatsapp/bot");
 
 const { obtenerZonasCobertura, normalizeString, obtenerPlanPorId, obtenerPlanesInternet } = require("../../services/web.service");
+const { registrarSolicitudInstalacion } = require("../../services/client.service");
 
 let nombre, telefono, localidad, paquete, ubicacion, caracteristicasDomicilio;
 
@@ -108,7 +109,7 @@ const flowContratacion = addKeyword('3', { sensitive: true })
             }
 
             if (input == 'x') {
-                return await flowDynamic('De acuerdo, dejaremos esto para más tarde\n\n🤖 Ahora, ¿pordrías compartirme algunas características de tu domicilio? 📑, para poder identificarlo mejor');
+                return await flowDynamic('De acuerdo, dejaremos esto para más tarde\n\n🤖 Ahora, ¿pordrías compartirme algunas referencias/características de tu domicilio? 📑, para poder identificarlo mejor');
             }
 
             if (ctx.body.includes('http') && ctx.body.includes('maps')) {
@@ -116,7 +117,7 @@ const flowContratacion = addKeyword('3', { sensitive: true })
 
                 return await flowDynamic([
                     'Gracias por compartirnos tu ubicación...',
-                    '🤖 Ahora, ¿pordrías compartirme algunas características de tu domicilio? 📑, para poder identificarlo mejor'
+                    '🤖 Ahora, ¿pordrías compartirme algunas referencias/características de tu domicilio? 📑, para poder identificarlo mejor'
                 ]);
             }
 
@@ -127,7 +128,7 @@ const flowContratacion = addKeyword('3', { sensitive: true })
 
                 return await flowDynamic([
                     'Gracias por compartirnos tu ubicación...',
-                    '🤖 Ahora, ¿pordrías compartirme algunas características de tu domicilio? 📑, para poder identificarlo mejor'
+                    '🤖 Ahora, ¿pordrías compartirme algunas referencias/características de tu domicilio? 📑, para poder identificarlo mejor'
                 ]);
             }
 
@@ -161,11 +162,9 @@ const flowContratacion = addKeyword('3', { sensitive: true })
         { capture: true },
         async ({ body }, { flowDynamic, gotoFlow, fallBack }) => {
             const input = normalizeString(body);
-            if (input == 'a') {
-                return flowDynamic([
-                    '🤖 Muy bien, gracias por apoyarnos con tu información\n\nRecuerde que para confirmar 100% la cobertura en su domicilio es necesario el estudio que realizará el asesor',
-                    'En los próximos minutos uno de nuestros asesores 🧑🏻‍💻 se podrá en contacto contigo para concluir con este proceso, por favor espere...'
-                ]);
+            if (input != 'a' && input != 'b') {
+                await flowDynamic('Se debe colocar una opción válida');
+                return fallBack();
             }
 
             if (input == 'b') {
@@ -173,8 +172,26 @@ const flowContratacion = addKeyword('3', { sensitive: true })
                 return await gotoFlow(flowSecundario);
             }
 
-            await flowDynamic('Se debe colocar una opción válida');
-            return fallBack();
+            const solicitud = {
+                nombre,
+                telefono,
+                localidad,
+                paquete,
+                ubicacion,
+                caracteristicasDomicilio
+            };
+            const errorPeticion = await registrarSolicitudInstalacion(solicitud);
+
+            if (errorPeticion) {
+                await flowDynamic('Upss...! Ocurrio un error inesperado, por favor apoyanos repitiendo el proceso');
+                const { flowSecundario } = require("../start/flowSecundario");
+                return await gotoFlow(flowSecundario);
+            }
+
+            return flowDynamic([
+                '🤖 Muy bien, gracias por apoyarnos con tu información\n\nRecuerde que para confirmar 100% la cobertura en su domicilio es necesario el estudio que realizará el asesor',
+                'En los próximos minutos uno de nuestros asesores 🧑🏻‍💻 se podrá en contacto contigo para concluir con este proceso, por favor espere...'
+            ]);
         }
     )
 

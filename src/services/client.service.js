@@ -2,8 +2,32 @@ const { default: axios } = require("axios");
 
 const api = 'https://chatbot-back.galasoftsolutions.com/api/';
 
+const validarSesion = async (telefono, respuesta = false) => {
+    await axios.get(`${api}chats/validarSesion/${telefono}`)
+        .then(response => {
+            respuesta = response.data.data;
+        })
+        .catch(error => {
+            console.log(error);
+        });
+
+    return respuesta;
+};
+
+const registrarSolicitudInstalacion = async (data, errorPeticion = false) => {
+    await axios.post(`${api}chats/registrarSolicitudInstalacion`, data)
+        .then(response => {
+            errorPeticion = false;
+        })
+        .catch(error => {
+            errorPeticion = true;
+            console.log(error);
+        });
+    return errorPeticion;
+};
+
 const registrarComprobantePago = async (data, errorPeticion = false) => {
-    await axios.post(api+'comprobantesPago/capturaComprobantePago', data)
+    await axios.post(`${api}comprobantesPago/capturaComprobantePago${data}`)
         .then(response => {
             errorPeticion = false;
         })
@@ -11,7 +35,7 @@ const registrarComprobantePago = async (data, errorPeticion = false) => {
             errorPeticion = true;
         });
     return errorPeticion;
-}
+};
 
 const detectFileType = (base64Data) => {
     const header = base64Data.substring(0, 16);
@@ -36,9 +60,11 @@ const detectFileType = (base64Data) => {
     }
 
     return 'unknown';
-}
+};
 
 module.exports = {
     registrarComprobantePago,
-    detectFileType
+    detectFileType,
+    validarSesion,
+    registrarSolicitudInstalacion
 };
