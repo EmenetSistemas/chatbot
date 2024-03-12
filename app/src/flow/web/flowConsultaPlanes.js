@@ -13,7 +13,8 @@ const flowConsultaPlanes = addKeyword('1', { sensitive: true })
     .addAnswer(
         '🤖 ¿Qué plan te interesa más?',
         { capture: true },
-        async (ctx, { flowDynamic, gotoFlow, fallBack }) => {
+        async (ctx, { flowDynamic, gotoFlow, fallBack, provider }) => {
+            console.log(ctx);
             if (ctx.body == '📋 Volver al menú principal') {
                 const { flowSecundario } = require("../start/flowSecundario");
                 return await gotoFlow(flowSecundario);
@@ -30,6 +31,13 @@ const flowConsultaPlanes = addKeyword('1', { sensitive: true })
                     await flowDynamic('No se encontró ningún plan con ese identificador.\nPor favor, introduce un identificador válido.');
                 } else {
                     await flowDynamic(plan);
+
+                    //const abc = await provider.getInstance();
+                    //await abc.chatModify({ archive: true }, ctx.key.remoteJid);
+
+                    const abc = await provider.getInstance();
+                    await abc.sendMessage(ctx.key.remoteJid, { text: 'oh hello there' }, { quoted: ctx });
+
                     const { flowSecundario } = require("../start/flowSecundario");
                     return await gotoFlow(flowSecundario);
                 }

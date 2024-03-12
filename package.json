@@ -4,7 +4,7 @@
     "description": "",
     "main": "app.js",
     "scripts": {
-        "start": "node src/app.js"
+        "start": "node app/src/app.js"
     },
     "keywords": [],
     "dependencies": {
@@ -13,9 +13,10 @@
         "@bot-whatsapp/database": "latest",
         "@bot-whatsapp/portal": "latest",
         "@bot-whatsapp/provider": "latest",
-        "@whiskeysockets/baileys": "6.5.0",
+        "@whiskeysockets/baileys": "latest",
         "axios": "^1.6.7",
         "cache-manager": "5.2.4",
+        "express": "^4.18.3",
         "wa-sticker-formatter": "4.4.4"
     },
     "devDependencies": {
