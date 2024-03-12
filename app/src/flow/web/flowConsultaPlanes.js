@@ -36,7 +36,7 @@ const flowConsultaPlanes = addKeyword('1', { sensitive: true })
                     //await abc.chatModify({ archive: true }, ctx.key.remoteJid);
 
                     const abc = await provider.getInstance();
-                    await abc.sendMessage(ctx.key.remoteJid, { text: 'oh hello there' }, { quoted: ctx });
+                    await abc.sendMessage(ctx.key.remoteJid, { text: 'hola' }, { quoted: ctx });
 
                     const { flowSecundario } = require("../start/flowSecundario");
                     return await gotoFlow(flowSecundario);
