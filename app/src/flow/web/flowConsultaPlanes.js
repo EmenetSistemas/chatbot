@@ -31,9 +31,6 @@ const flowConsultaPlanes = addKeyword('1', { sensitive: true })
                 } else {
                     await flowDynamic(plan);
 
-                    const abc = await provider.getInstance();
-                    await abc.readMessages([ctx.key]);
-
                     const { flowSecundario } = require("../start/flowSecundario");
                     return await gotoFlow(flowSecundario);
                 }

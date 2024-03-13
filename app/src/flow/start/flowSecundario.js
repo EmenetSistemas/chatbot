@@ -7,6 +7,7 @@ const flowSecundario = addKeyword(['no'], { sensitive: true })
     .addAction(
         async (ctx, { endFlow, provider }) => {
             const abc = await provider.getInstance();
+            await abc.readMessages([ctx.key]);
             await abc.chatModify({ archive: true, lastMessages: [ctx] }, ctx.key.remoteJid);
 
             const status = await validarSesion(ctx.from);

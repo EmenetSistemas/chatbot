@@ -36,9 +36,6 @@ const flowCoberturaInternet = addKeyword('2', { sensitive: true })
             if (coberturas.responseType == 1) {
                 await flowDynamic(coberturas.mensaje);
 
-                const abc = await provider.getInstance();
-                await abc.readMessages([ctx.key]);
-
                 const { flowSecundario } = require("../start/flowSecundario");
                 return await gotoFlow(flowSecundario);
             }

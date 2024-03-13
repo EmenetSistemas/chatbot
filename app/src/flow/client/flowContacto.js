@@ -10,10 +10,7 @@ const flowContacto = addKeyword('6', { sensitive: true })
         ''
     ])
     .addAction(
-        async (ctx, { gotoFlow, provider }) => {
-            const abc = await provider.getInstance();
-            await abc.readMessages([ctx.key]);
-
+        async (_, { gotoFlow }) => {
             const { flowSecundario } = require("../start/flowSecundario");
             return await gotoFlow(flowSecundario);
         }
