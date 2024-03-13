@@ -5,12 +5,6 @@ const { registrarComprobantePago, detectFileType } = require("../../services/cli
 let file, typeFile = 'unknown';
 
 const flowRegistrarComprobantePago = addKeyword('5', { sensitive: true })
-    .addAction(
-        async (ctx, { provider }) => {
-            const abc = await provider.getInstance();
-            await abc.chatModify({ archive: false, lastMessages: [ctx] }, ctx.key.remoteJid);
-        }
-    )
     .addAnswer(
         '🤖 Por favor envíe la captura o foto de su comprobante de pago',
         { capture: true },

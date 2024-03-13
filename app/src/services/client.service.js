@@ -27,12 +27,13 @@ const registrarSolicitudInstalacion = async (data, errorPeticion = false) => {
 };
 
 const registrarComprobantePago = async (data, errorPeticion = false) => {
-    await axios.post(`${api}comprobantesPago/capturaComprobantePago${data}`)
+    await axios.post(`${api}comprobantesPago/capturaComprobantePago`, data)
         .then(response => {
             errorPeticion = false;
         })
         .catch(error => {
             errorPeticion = true;
+            console.log(error);
         });
     return errorPeticion;
 };

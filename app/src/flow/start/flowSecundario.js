@@ -19,11 +19,26 @@ const flowSecundario = addKeyword(['no'], { sensitive: true })
     )
     .addAnswer(
         [
-            `🤖 ¿Algo más en lo que pueda ayudarte el día de hoy?\n${obtenerOpcionesFlujoPrincipal()}`
+            '🤖 ¿Algo más en lo que pueda ayudarte el día de hoy?',
+            '',
+            '   *1.* Volver al menú principal 📑',
+            '   *2.* Terminar la conversación 👋',
+            ''
         ],
-        null,
-        null,
-        flujosPrincipales
+        { capture: true },
+        async ({ body }, { flowDynamic, fallBack, gotoFlow }) => {
+            if (body == '1') {
+                const { flowOptions } = require("../start/flowOptions");
+                return await gotoFlow(flowOptions);
+            }
+
+            if (body == '2') {
+                return await flowDynamic('🤖 Espero hayas encontrado lo que buscabas, cuando me necesitas solo manda un *hola*');
+            }
+
+            await flowDynamic('Se debe colocar una opción válida');
+            return await fallBack();
+        }
     )
 
 module.exports = { flowSecundario };
