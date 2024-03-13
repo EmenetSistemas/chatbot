@@ -5,8 +5,11 @@ const { obtenerOpcionesFlujoPrincipal, flujosPrincipales } = require("../../serv
 
 const flowSecundario = addKeyword(['no'], { sensitive: true })
     .addAction(
-        async ({ from }, { endFlow }) => {
-            const status = await validarSesion(from);
+        async (ctx, { endFlow, provider }) => {
+            const abc = await provider.getInstance();
+            await abc.chatModify({ archive: true, lastMessages: [ctx] }, ctx.key.remoteJid);
+
+            const status = await validarSesion(ctx.from);
 
             if (status) {
                 return endFlow();

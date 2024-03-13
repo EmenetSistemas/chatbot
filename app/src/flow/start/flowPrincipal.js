@@ -6,8 +6,11 @@ const { validarSesion } = require('../../services/client.service');
 
 const flowPrincipal = addKeyword(['hola', 'menu'])
     .addAction(
-        async ({ from }, { endFlow }) => {
-            const status = await validarSesion(from);
+        async (ctx, { endFlow, provider }) => {
+            const abc = await provider.getInstance();
+            await abc.chatModify({ archive: true, lastMessages: [ctx] }, ctx.key.remoteJid);
+
+            const status = await validarSesion(ctx.from);
             
             if (status) {
                 return endFlow();

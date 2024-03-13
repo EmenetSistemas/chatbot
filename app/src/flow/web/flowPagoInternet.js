@@ -13,7 +13,7 @@ const flowPagoInternet = addKeyword('4', { sensitive: true })
         [
             '🌎 *Pago directo en sucursales autorizadas*',
             '',
-            'Horarios de atención\n- Lunes a Viernes (9:00 AM - 6:00 PM)\n- Sábado (9:00 AM - 3:00 PM)'
+            '🕑 Horarios de atención\n- Lunes a Viernes (9:00 AM - 6:00 PM)\n- Sábado (9:00 AM - 3:00 PM)'
         ],
         null,
         async ({ from }, { flowDynamic, provider }) => {
@@ -42,7 +42,10 @@ const flowPagoInternet = addKeyword('4', { sensitive: true })
             '🤖 Si se realiza el pago por transferencia o pago en ventanilla es necesario enviar por este medio una 📸 captura/foto del comprobante de pago, colocando además a nombre de quien está el servicio 👤'
         ],
         { media: 'https://m-net.mx/Emenet_Internet/documentos/cuenta.jpg' },
-        async (_, { gotoFlow }) => {
+        async (ctx, { gotoFlow, provider }) => {
+            const abc = await provider.getInstance();
+            await abc.readMessages([ctx.key]);
+
             const { flowSecundario } = require("../start/flowSecundario");
             return await gotoFlow(flowSecundario);
         }

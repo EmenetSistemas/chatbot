@@ -9,6 +9,9 @@ async function enviarMensajeTexto(req, res) {
     });
 }
 
+/*const abc = await provider.getInstance();
+await abc.sendMessage(ctx.key.remoteJid, { text: 'hola' }, { quoted: ctx });*/
+
 module.exports = {
     enviarMensajeTexto
 };

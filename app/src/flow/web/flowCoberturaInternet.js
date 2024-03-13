@@ -10,7 +10,7 @@ const flowCoberturaInternet = addKeyword('2', { sensitive: true })
             '- *Menú*, si desea volver al menú principal 📋'
         ],
         { capture: true },
-        async (ctx, { flowDynamic, fallBack, gotoFlow }) => {
+        async (ctx, { flowDynamic, fallBack, gotoFlow, provider }) => {
             const input = normalizeString(ctx.body);
 
             if (input == 'menu') {
@@ -35,6 +35,10 @@ const flowCoberturaInternet = addKeyword('2', { sensitive: true })
 
             if (coberturas.responseType == 1) {
                 await flowDynamic(coberturas.mensaje);
+
+                const abc = await provider.getInstance();
+                await abc.readMessages([ctx.key]);
+
                 const { flowSecundario } = require("../start/flowSecundario");
                 return await gotoFlow(flowSecundario);
             }
