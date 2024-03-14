@@ -13,7 +13,7 @@ const flowConsultaPlanes = addKeyword(['1', 'planes'], { sensitive: true })
     .addAnswer(
         '🤖 ¿Qué plan te interesa más?',
         { capture: true },
-        async (ctx, { flowDynamic, gotoFlow, fallBack, provider }) => {
+        async (ctx, { flowDynamic, gotoFlow, fallBack }) => {
             if (ctx.body == '📋 Volver al menú principal') {
                 const { flowSecundario } = require("../start/flowSecundario");
                 return await gotoFlow(flowSecundario);
