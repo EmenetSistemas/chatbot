@@ -41,7 +41,7 @@ const flowDefault = addKeyword(EVENTS.WELCOME)
         }
     )
 
-const flowDefault1 = addKeyword([EVENTS.WELCOME, EVENTS.MEDIA])
+const flowDefault1 = addKeyword(EVENTS.MEDIA)
     .addAction(
         async (ctx, { endFlow, provider }) => {
             const abc = await provider.getInstance();

@@ -1,6 +1,6 @@
 const { addKeyword } = require("@bot-whatsapp/bot");
 
-const flowContacto = addKeyword('6', { sensitive: true })
+const flowContacto = addKeyword(['6', 'contactar', 'llamar'], { sensitive: true })
     .addAnswer('🤖 Para contactar vía telefónica con alguno de nuestros asesores lo puedes realizar con los siguientes números:')
     .addAnswer([
         'Soporte 🛜',

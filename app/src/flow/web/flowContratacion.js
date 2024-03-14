@@ -5,7 +5,7 @@ const { registrarSolicitudInstalacion } = require("../../services/client.service
 
 let nombre, telefono, localidad, paquete, ubicacion, caracteristicasDomicilio;
 
-const flowContratacion = addKeyword('3', { sensitive: true })
+const flowContratacion = addKeyword(['3', 'contratacion', 'internet'], { sensitive: true })
     .addAction(
         async (ctx, { provider }) => {
             const abc = await provider.getInstance();

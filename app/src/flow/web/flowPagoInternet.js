@@ -1,6 +1,6 @@
 const { addKeyword } = require("@bot-whatsapp/bot");
 
-const flowPagoInternet = addKeyword('4', { sensitive: true })
+const flowPagoInternet = addKeyword(['4', 'pagar', 'mi internet', 'mi servicio'], { sensitive: true })
     .addAnswer([
         '🤖❗*Importante*❗',
         '',

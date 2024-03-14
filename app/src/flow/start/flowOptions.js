@@ -9,9 +9,9 @@ const flowOptions = addKeyword('1')
         ],
         { capture: true },
         async ({ body }, { flowDynamic, fallBack }) => {
-            const op = isNaN(body) ? 0 : parseInt(body);
+            const keywords = flujosPrincipales.map(item => item.ctx.keyword).flat();
 
-            if (op < 1 || op > 6) {
+            if (!keywords.includes(body)) {
                 await flowDynamic('Se debe colocar una opción válida');
                 return await fallBack();
             }

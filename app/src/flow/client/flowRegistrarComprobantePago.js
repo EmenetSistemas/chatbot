@@ -4,7 +4,7 @@ const { registrarComprobantePago, detectFileType } = require("../../services/cli
 
 let file, typeFile = 'unknown';
 
-const flowRegistrarComprobantePago = addKeyword('5', { sensitive: true })
+const flowRegistrarComprobantePago = addKeyword(['5', 'comprobante', 'pago'], { sensitive: true })
     .addAnswer(
         '🤖 Por favor envíe la captura o foto de su comprobante de pago',
         { capture: true },

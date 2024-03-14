@@ -2,7 +2,7 @@ const { addKeyword } = require("@bot-whatsapp/bot");
 
 const { normalizeString, obtenerZonasCobertura } = require("../../services/web.service");
 
-const flowCoberturaInternet = addKeyword('2', { sensitive: true })
+const flowCoberturaInternet = addKeyword(['2', 'cobertura'], { sensitive: true })
     .addAnswer(
         [
             '🤖 ¿Cuál es la localidad donde se encuentra su domicilio?'

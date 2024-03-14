@@ -2,7 +2,7 @@ const { addKeyword } = require("@bot-whatsapp/bot");
 
 const { obtenerPlanesInternet, obtenerPlanPorId, normalizeString } = require("../../services/web.service");
 
-const flowConsultaPlanes = addKeyword('1', { sensitive: true })
+const flowConsultaPlanes = addKeyword(['1', 'planes'], { sensitive: true })
     .addAnswer(
         '🛜 Los planes/paquetes de internet con los que contamos actualmente, son los siguientes:',
         null,
