@@ -169,7 +169,10 @@ const flowContratacion = addKeyword('3', { sensitive: true })
         async ({ body }, { flowDynamic, gotoFlow, fallBack }) => {
             const input = normalizeString(body);
             if (input != 'a' && input != 'b') {
-                await flowDynamic('Se debe colocar una opción válida');
+                await flowDynamic([
+                    'Se debe colocar una opción válida',
+                    '🤖 ¿La información es la correcta?\n\n    a. Continuar con el proceso ✔️\n    b. Cancelar proceso ❌'
+                ]);
                 return fallBack();
             }
 
@@ -196,7 +199,7 @@ const flowContratacion = addKeyword('3', { sensitive: true })
 
             return flowDynamic([
                 '🤖 Muy bien, gracias por apoyarnos con tu información\n\nRecuerde que para confirmar 100% la cobertura en su domicilio es necesario el estudio que realizará el asesor',
-                'En los próximos minutos uno de nuestros asesores 🧑🏻‍💻 se podrá en contacto contigo para concluir con este proceso, por favor espere...'
+                'Uno de nuestros asesores 🧑🏻‍💻 se podrá en contacto contigo lo antes posible para concluir con este proceso, por favor este al pendiente de este chat...'
             ]);
         }
     )
