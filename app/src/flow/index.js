@@ -2,13 +2,14 @@ const { createFlow } = require("@bot-whatsapp/bot");
 
 const { flowPrincipal } = require("./start/flowPrincipal");
 const { flowSecundario } = require("./start/flowSecundario");
-const { flowDefault } = require("./start/flowDefault");
+const { flowDefault, flowDefault1 } = require("./start/flowDefault");
 
 const flow = createFlow(
     [
         flowPrincipal,
         flowSecundario,
-        flowDefault
+        flowDefault,
+        flowDefault1
     ]
 );
 
