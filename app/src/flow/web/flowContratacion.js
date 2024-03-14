@@ -93,9 +93,9 @@ const flowContratacion = addKeyword(['3', 'contratacion', 'internet'], { sensiti
                 if (!plan) {
                     await flowDynamic('No se encontró ningún plan con ese identificador.\nPor favor, introduce un identificador válido.');
                 } else {
-                    paquete = plan;
+                    paquete = plan.pkTblPlan;
                     return flowDynamic([
-                        plan,
+                        plan.mensaje,
                         '🤖 Ahora, ¿Podrías compartirnos tu ubicación actual/fija?\n\n*(NOTA: UBICACIÓN ACTUAL/FIJA, NO EN TIEMPO REAL)* 🌎\n\n*X* Si no se encuentra en su domicilio o no tiene forma de enviar la ubicación'
                     ]);
                 }

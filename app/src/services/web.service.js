@@ -318,7 +318,10 @@ const obtenerPlanPorId = async (id) => {
 
         const mensaje = `*Plan seleccionado:* 🛜\n- ${(planEncontrado.tipoPlan == 1 ? 'P#' : 'PQ#') + planEncontrado.pkTblPlan} - (*${planEncontrado.plan}* x *${pago}* ${periodo})\n\n*Servicios:* 📋\n${servicios}\n\n*Recomendaciones:* ✔️\n- Dispositivos conectados simultaneamente: *${planEncontrado.dispositivosSimultaneos}*\n- Estudio / trabajo en casa simultáneamente: *${planEncontrado.estudioTrabajo}*\n- Reproducción de video: *${planEncontrado.reproduccionVideo}*\n- Juego en línea: *${planEncontrado.juegoLinea}*\n- Transmisiones en vivo: *${planEncontrado.transmisiones}*`;
 
-        return mensaje;
+        return {
+            mensaje,
+            pkTblPlan: planEncontrado.pkTblPlan
+        };
     } catch (error) {
         return 'Upss...! Ocurrió un error inesperado, por favor intenta nuevamente';
     }
@@ -356,7 +359,7 @@ const obtenerZonasCobertura = async (input) => {
             const interZona = normalizeString(comunidad).split(' ');
             return interZona.some(pComuni => pComuni === palabra);
         });
-    });    
+    });
     if (coincidenciasParciales.length > 0) {
         if (coincidenciasParciales.length == 1) {
             return {

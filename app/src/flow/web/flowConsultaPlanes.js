@@ -29,7 +29,7 @@ const flowConsultaPlanes = addKeyword(['1', 'planes'], { sensitive: true })
                 if (!plan) {
                     await flowDynamic('No se encontró ningún plan con ese identificador.\nPor favor, introduce un identificador válido.');
                 } else {
-                    await flowDynamic(plan);
+                    await flowDynamic(plan.mensaje);
 
                     const { flowSecundario } = require("../start/flowSecundario");
                     return await gotoFlow(flowSecundario);
