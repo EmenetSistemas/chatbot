@@ -4,7 +4,7 @@ const { obtenerSaludo } = require('../../services/web.service');
 const { obtenerOpcionesFlujoPrincipal, flujosPrincipales } = require('../../services/generic.service');
 const { validarSesion } = require('../../services/client.service');
 
-const flowPrincipal = addKeyword(['hola', 'menu'])
+const flowPrincipal = addKeyword(['hola', 'menu', 'buenas', 'buenos'])
     .addAction(
         async (ctx, { endFlow, provider }) => {
             const abc = await provider.getInstance();
