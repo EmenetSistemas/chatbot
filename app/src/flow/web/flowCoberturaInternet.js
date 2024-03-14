@@ -5,19 +5,11 @@ const { normalizeString, obtenerZonasCobertura } = require("../../services/web.s
 const flowCoberturaInternet = addKeyword('2', { sensitive: true })
     .addAnswer(
         [
-            '🤖 ¿Cuál es la localidad donde se encuentra su domicilio?',
-            '',
-            '- *Menú*, si desea volver al menú principal 📋'
+            '🤖 ¿Cuál es la localidad donde se encuentra su domicilio?'
         ],
         { capture: true },
-        async (ctx, { flowDynamic, fallBack, gotoFlow, provider }) => {
+        async (ctx, { flowDynamic, fallBack, gotoFlow }) => {
             const input = normalizeString(ctx.body);
-
-            if (input == 'menu') {
-                const { flowSecundario } = require("../start/flowSecundario");
-                return await gotoFlow(flowSecundario);
-            }
-
             const coberturas = await obtenerZonasCobertura(input);
 
             if (coberturas.responseType == 3) {

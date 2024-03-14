@@ -11,7 +11,7 @@ const flowPrincipal = addKeyword(['hola', 'menu'])
             await abc.chatModify({ archive: true, lastMessages: [ctx] }, ctx.key.remoteJid);
 
             const status = await validarSesion(ctx.from);
-            
+
             if (status) {
                 return endFlow();
             }
@@ -22,8 +22,15 @@ const flowPrincipal = addKeyword(['hola', 'menu'])
         [
             `🤖 ¿En que puedo ayudarte el día de hoy?\n${obtenerOpcionesFlujoPrincipal()}`
         ],
-        null,
-        null,
+        { capture: true },
+        async ({ body }, { flowDynamic, fallBack }) => {
+            const op = isNaN(body) ? 0 : parseInt(body);
+
+            if (op < 1 || op > 6) {
+                await flowDynamic('Se debe colocar una opción válida');
+                return await fallBack();
+            }
+        },
         flujosPrincipales
     )
 
