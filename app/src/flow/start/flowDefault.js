@@ -21,7 +21,7 @@ const flowDefault = addKeyword(EVENTS.WELCOME)
         [
             '🤖 ¿Algo más en lo que pueda ayudarte el día de hoy?',
             '',
-            '   *1.* Volver al menú principal 📑',
+            '   *1.* Ver menú principal 📑',
             '   *2.* Terminar la conversación 👋',
             ''
         ],

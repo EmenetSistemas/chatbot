@@ -26,7 +26,7 @@ const flowPrincipal = addKeyword(['hola', 'menu', 'buenas', 'buenos'])
         async ({ body }, { flowDynamic, fallBack }) => {
             const keywords = flujosPrincipales.map(item => item.ctx.keyword).flat();
 
-            if (!keywords.includes(body)) {
+            if (!keywords.some(keyword => body.includes(keyword))) {
                 await flowDynamic('Se debe colocar una opción válida');
                 return await fallBack();
             }

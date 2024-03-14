@@ -1,7 +1,6 @@
 const { addKeyword } = require("@bot-whatsapp/bot");
 
 const { validarSesion } = require("../../services/client.service");
-const { obtenerOpcionesFlujoPrincipal, flujosPrincipales } = require("../../services/generic.service");
 
 const flowSecundario = addKeyword(['no'], { sensitive: true })
     .addAction(
@@ -21,7 +20,7 @@ const flowSecundario = addKeyword(['no'], { sensitive: true })
         [
             '🤖 ¿Algo más en lo que pueda ayudarte el día de hoy?',
             '',
-            '   *1.* Volver al menú principal 📑',
+            '   *1.* Ver menú principal 📑',
             '   *2.* Terminar la conversación 👋',
             ''
         ],
