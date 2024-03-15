@@ -3,7 +3,7 @@ const { addKeyword } = require("@bot-whatsapp/bot");
 const { obtenerZonasCobertura, normalizeString, obtenerPlanPorId, obtenerPlanesInternet } = require("../../services/web.service");
 const { registrarSolicitudInstalacion } = require("../../services/client.service");
 
-let nombre, telefono, localidad, paquete, ubicacion, caracteristicasDomicilio;
+let nombre, telefono, localidad, paquete, ubicacion, caracteristicasDomicilio, detallePaquete;
 
 const flowContratacion = addKeyword(['3', 'contratacion', 'internet'], { sensitive: true })
     .addAction(
@@ -94,6 +94,7 @@ const flowContratacion = addKeyword(['3', 'contratacion', 'internet'], { sensiti
                     await flowDynamic('No se encontró ningún plan con ese identificador.\nPor favor, introduce un identificador válido.');
                 } else {
                     paquete = plan.pkTblPlan;
+                    detallePaquete = plan.mensaje;
                     return flowDynamic([
                         plan.mensaje,
                         '🤖 Ahora, ¿Podrías compartirnos tu ubicación actual/fija?\n\n*(NOTA: UBICACIÓN ACTUAL/FIJA, NO EN TIEMPO REAL)* 🌎\n\n*X* Si no se encuentra en su domicilio o no tiene forma de enviar la ubicación'
@@ -154,8 +155,8 @@ const flowContratacion = addKeyword(['3', 'contratacion', 'internet'], { sensiti
 
             caracteristicasDomicilio = body;
             const mensaje = ubicacion ?
-                `*Nombre*:\n    👤 ${nombre}\n\n*Localidad*:\n    📍 ${localidad}\n\n*Domicilio*:\n🧭 ${ubicacion}\n\n*Características*:\n\n${caracteristicasDomicilio}\n\n${paquete}` :
-                `*Nombre*:\n    👤 ${nombre}\n\n*Localidad*:\n    📍 ${localidad}\n\n*Características*: 📑\n\n${caracteristicasDomicilio}\n\n${paquete}`;
+                `*Nombre*:\n    👤 ${nombre}\n\n*Localidad*:\n    📍 ${localidad}\n\n*Domicilio*:\n🧭 ${ubicacion}\n\n*Características*:\n\n${caracteristicasDomicilio}\n\n${detallePaquete}` :
+                `*Nombre*:\n    👤 ${nombre}\n\n*Localidad*:\n    📍 ${localidad}\n\n*Características*: 📑\n\n${caracteristicasDomicilio}\n\n${detallePaquete}`;
 
             return await flowDynamic([
                 '🤖 A continuación te comparto un resumen de la información compartida:',
