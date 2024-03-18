@@ -14,6 +14,18 @@ const validarSesion = async (telefono, respuesta = false) => {
     return respuesta;
 };
 
+const reactivarSesion = async (telefono, respuesta = false) => {
+    await axios.get(`${api}chats/eliminarChatBlackList/${telefono}`)
+    .then(response => {
+        respuesta = true;
+    })
+    .catch(error => {
+        console.log(error);
+    });
+
+    return respuesta;
+}
+
 const registrarSolicitudInstalacion = async (data, errorPeticion = false) => {
     await axios.post(`${api}chats/registrarSolicitudInstalacion`, data)
         .then(response => {
@@ -67,5 +79,6 @@ module.exports = {
     registrarComprobantePago,
     detectFileType,
     validarSesion,
+    reactivarSesion,
     registrarSolicitudInstalacion
 };
