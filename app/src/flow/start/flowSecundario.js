@@ -1,19 +1,11 @@
 const { addKeyword } = require("@bot-whatsapp/bot");
 
-const { validarSesion } = require("../../services/client.service");
-
-const flowSecundario = addKeyword(['no'], { sensitive: true })
+const flowSecundario = addKeyword(['keen_mclovin'], { sensitive: true })
     .addAction(
-        async (ctx, { endFlow, provider }) => {
+        async (ctx, { provider }) => {
             const abc = await provider.getInstance();
             await abc.readMessages([ctx.key]);
             await abc.chatModify({ archive: true, lastMessages: [ctx] }, ctx.key.remoteJid);
-
-            const status = await validarSesion(ctx.from);
-
-            if (status) {
-                return endFlow();
-            }
         }
     )
     .addAnswer(
@@ -25,13 +17,15 @@ const flowSecundario = addKeyword(['no'], { sensitive: true })
             ''
         ],
         { capture: true },
-        async ({ body }, { flowDynamic, fallBack, gotoFlow }) => {
-            if (body == '1') {
+        async (ctx, { flowDynamic, fallBack, gotoFlow, provider }) => {
+            if (ctx.body == '1') {
                 const { flowOptions } = require("../start/flowOptions");
                 return await gotoFlow(flowOptions);
             }
 
-            if (body == '2') {
+            if (ctx.body == '2') {
+                const abc = await provider.getInstance();
+                await abc.readMessages([ctx.key]);
                 return await flowDynamic('🤖 Espero hayas encontrado lo que buscabas, cuando me necesitas solo manda un *hola*');
             }
 
