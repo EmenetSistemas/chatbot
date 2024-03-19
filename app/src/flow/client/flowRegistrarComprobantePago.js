@@ -5,10 +5,22 @@ const { registrarComprobantePago, detectFileType } = require("../../services/cli
 let file, typeFile = 'unknown';
 
 const flowRegistrarComprobantePago = addKeyword(['5', 'comprobante', 'pago'], { sensitive: true })
+    .addAnswer([
+        '🤖 Para poder capturar tu comprobante de pago requerimos de 3 datos, los cuales te estaré solicitando uno por uno',
+        '',
+        '❌ Si deseas cancelar o salir de este proceso lo puedes realizar en cualquier momento colocando la palabra *cancelar*'
+    ])
     .addAnswer(
-        '🤖 Por favor envíe la captura o foto de su comprobante de pago',
+        '🤖 Por favor envíe únicamente la captura o foto de su comprobante de pago',
         { capture: true },
         async (ctx, { flowDynamic, fallBack }) => {
+            const input = normalizeString(ctx.body);
+
+            if (input == 'cancelar') {
+                const { flowSecundario } = require("../start/flowSecundario");
+                return await gotoFlow(flowSecundario);
+            }
+
             try {
                 const buffer = await downloadMediaMessage(ctx, "buffer");
                 file = buffer.toString('base64');
@@ -32,6 +44,13 @@ const flowRegistrarComprobantePago = addKeyword(['5', 'comprobante', 'pago'], { 
     .addAction(
         { capture: true },
         async (ctx, { flowDynamic, gotoFlow }) => {
+            const input = normalizeString(ctx.body);
+
+            if (input == 'cancelar') {
+                const { flowSecundario } = require("../start/flowSecundario");
+                return await gotoFlow(flowSecundario);
+            }
+            
             const data = {
                 nombreServicio: ctx.body,
                 numeroContacto: ctx.from,
