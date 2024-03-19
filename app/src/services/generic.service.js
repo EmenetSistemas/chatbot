@@ -24,7 +24,7 @@ const obtenerOpcionesFlujoPrincipal = () => {
         '    *6.* Contactar con un asesor ☎️',
         '',
         'Visita nuestra página:\nhttps://m-net.mx/',
-        'Realice un test de velicidad:\nhttps://emenet.m-net.mx/inicio#team'
+        'Realice un test de velocidad:\nhttps://emenet.m-net.mx/inicio#team'
     ];
 
     const opcionesConSaltoInicial = [''].concat(opciones);
