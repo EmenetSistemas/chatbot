@@ -23,6 +23,11 @@ const flowPagoInternet = addKeyword(['4', 'pagar', 'mi internet', 'mi servicio']
                 from + '@c.us',
                 { location: { degreesLatitude: 19.1815901, degreesLongitude: -99.4671439 } }
             );
+            await flowDynamic('📍 San Pedro Cholula');
+            await abc.sendMessage(
+                from + '@c.us',
+                { location: { degreesLatitude: 19.263731, degreesLongitude: -99.484704 } }
+            );
             await flowDynamic('📍 Santa Monica');
             await abc.sendMessage(
                 from + '@c.us',

@@ -1,8 +1,9 @@
 const { addKeyword } = require("@bot-whatsapp/bot");
 const { downloadMediaMessage } = require("@whiskeysockets/baileys");
 const { registrarComprobantePago, detectFileType } = require("../../services/client.service");
+const { normalizeString } = require("../../services/web.service");
 
-let file, typeFile = 'unknown';
+let file, typeFile = 'unknown', nombreServicio;
 
 const flowRegistrarComprobantePago = addKeyword(['5', 'comprobante', 'pago'], { sensitive: true })
     .addAnswer([
@@ -50,12 +51,21 @@ const flowRegistrarComprobantePago = addKeyword(['5', 'comprobante', 'pago'], { 
                 const { flowSecundario } = require("../start/flowSecundario");
                 return await gotoFlow(flowSecundario);
             }
+
+            nombreServicio = ctx.body;
             
+            return await flowDynamic(`🤖 Excelente *${ctx.body}* ahora, algún comentario u observación acerca de tu pago...?`);
+        }
+    )
+    .addAction(
+        { capture: true },
+        async (ctx, { flowDynamic, gotoFlow }) => {
             const data = {
-                nombreServicio: ctx.body,
+                nombreServicio: nombreServicio,
                 numeroContacto: ctx.from,
                 comprobantePago: file,
-                tipoArchivoComprobante: typeFile
+                tipoArchivoComprobante: typeFile,
+                comentarios: ctx.body
             };
 
             const errorPeticion = await registrarComprobantePago(data);
@@ -72,6 +82,6 @@ const flowRegistrarComprobantePago = addKeyword(['5', 'comprobante', 'pago'], { 
             const { flowSecundario } = require("../start/flowSecundario");
             return await gotoFlow(flowSecundario);
         }
-    );
+    )
 
 module.exports = { flowRegistrarComprobantePago };
