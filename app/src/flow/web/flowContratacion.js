@@ -22,7 +22,7 @@ const flowContratacion = addKeyword(['3', 'contratacion', 'internet'], { sensiti
     .addAnswer(
         '🤖 ¿Cúal es tú nombre completo?',
         { capture: true },
-        async (ctx, { flowDynamic, gotoFlow }) => {
+        async (ctx, { flowDynamic, gotoFlow, fallBack }) => {
             const input = normalizeString(ctx.body);
 
             if (input == 'cancelar') {
@@ -30,14 +30,19 @@ const flowContratacion = addKeyword(['3', 'contratacion', 'internet'], { sensiti
                 return await gotoFlow(flowSecundario);
             }
 
+            if (input.split(' ').length <= 2) {
+                await flowDynamic('Se debe colocar nombre completo');
+                return await fallBack();
+            }
+
             nombre = ctx.body;
             telefono = ctx.from;
 
             await flowDynamic('Mucho gusto *' + nombre + '*, continuemos...');
+            return await flowDynamic('🤖 ¿Cuál es la localidad en donde vive?');
         }
     )
-    .addAnswer(
-        '🤖 ¿Cuál es la localidad en donde vive?',
+    .addAction(
         { capture: true },
         async (ctx, { flowDynamic, fallBack, gotoFlow }) => {
             const input = normalizeString(ctx.body);

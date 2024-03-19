@@ -14,7 +14,7 @@ const flowRegistrarComprobantePago = addKeyword(['5', 'comprobante', 'pago'], { 
     .addAnswer(
         '🤖 Por favor envíe únicamente la captura o foto de su comprobante de pago',
         { capture: true },
-        async (ctx, { flowDynamic, fallBack }) => {
+        async (ctx, { flowDynamic, gotoFlow, fallBack }) => {
             const input = normalizeString(ctx.body);
 
             if (input == 'cancelar') {
@@ -44,12 +44,20 @@ const flowRegistrarComprobantePago = addKeyword(['5', 'comprobante', 'pago'], { 
     )
     .addAction(
         { capture: true },
-        async (ctx, { flowDynamic, gotoFlow }) => {
+        async (ctx, { flowDynamic, gotoFlow, fallBack }) => {
             const input = normalizeString(ctx.body);
 
             if (input == 'cancelar') {
                 const { flowSecundario } = require("../start/flowSecundario");
                 return await gotoFlow(flowSecundario);
+            }
+
+            if (input.split(' ').length <= 2) {
+                await flowDynamic([
+                    'Se debe colocar nombre completo',
+                    '🤖 Ahora, ¿A nombre de quien se encuentra el servicio?'
+                ]);
+                return await fallBack();
             }
 
             nombreServicio = ctx.body;
@@ -60,6 +68,13 @@ const flowRegistrarComprobantePago = addKeyword(['5', 'comprobante', 'pago'], { 
     .addAction(
         { capture: true },
         async (ctx, { flowDynamic, gotoFlow }) => {
+            const input = normalizeString(ctx.body);
+
+            if (input == 'cancelar') {
+                const { flowSecundario } = require("../start/flowSecundario");
+                return await gotoFlow(flowSecundario);
+            }
+            
             const data = {
                 nombreServicio: nombreServicio,
                 numeroContacto: ctx.from,
