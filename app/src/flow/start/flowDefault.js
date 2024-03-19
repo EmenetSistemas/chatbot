@@ -1,44 +1,49 @@
 const { addKeyword, EVENTS } = require("@bot-whatsapp/bot");
 
 const { validarSesion } = require("../../services/client.service");
+const { normalizeString, obtenerSaludo } = require("../../services/web.service");
+const { flujosPrincipales, obtenerOpcionesFlujoPrincipal } = require("../../services/generic.service");
+
+const keywords = ['hola', 'menu', 'buenas', 'buenos'];
 
 const flowDefault = addKeyword(EVENTS.WELCOME)
     .addAction(
-        async (ctx, { endFlow, provider }) => {
+        async (ctx, { flowDynamic, endFlow, provider }) => {
+            const status = await validarSesion(ctx.from);
+
+            if (status) {
+                await flowDynamic(`🧑🏻‍💻 Por favor espere, nos encontramos trabajando para poder atenderle lo antes posible...`);
+                return endFlow();
+            }
+
             const abc = await provider.getInstance();
             await abc.readMessages([ctx.key]);
             await abc.chatModify({ archive: true, lastMessages: [ctx] }, ctx.key.remoteJid);
 
-            const status = await validarSesion(ctx.from);
+            const input = normalizeString(ctx.body);
 
-            if (status) {
-                return endFlow();
-            }
+            return await (!keywords.some(keyword => input.includes(keyword))) ? flowDynamic('Eso no lo se :(') : flowDynamic(`🙌 Hola ${obtenerSaludo()}, bienvenido al 🤖 chatbot de *Emenet*`);
         }
     )
-    .addAnswer('Eso no lo se :(')
     .addAnswer(
         [
-            '🤖 ¿Algo más en lo que pueda ayudarte el día de hoy?',
-            '',
-            '   *1.* Ver menú principal 📑',
-            '   *2.* Terminar la conversación 👋',
-            ''
+            `🤖 ¿En que puedo ayudarte el día de hoy?\n${obtenerOpcionesFlujoPrincipal()}`
         ],
         { capture: true },
-        async ({ body }, { flowDynamic, fallBack, gotoFlow }) => {
-            if (body == '1') {
-                const { flowOptions } = require("../start/flowOptions");
-                return await gotoFlow(flowOptions);
-            }
+        async ({ body }, { flowDynamic, fallBack }) => {
+            const input = await normalizeString(body);
+            const keywords = await flujosPrincipales.map(item => item.ctx.keyword).flat();
 
-            if (body == '2') {
-                return await flowDynamic('🤖 Espero hayas encontrado lo que buscabas, cuando me necesitas solo manda un *hola*');
-            }
+            const validate = await keywords.some(keyword => {
+                return input.split(' ').some(pInput => pInput === keyword);
+            });
 
-            await flowDynamic('Se debe colocar una opción válida');
-            return await fallBack();
-        }
+            if (!validate) {
+                await flowDynamic('Se debe colocar una opción válida');
+                return await fallBack();
+            }
+        },
+        flujosPrincipales
     )
 
 const flowDefault1 = addKeyword(EVENTS.MEDIA)

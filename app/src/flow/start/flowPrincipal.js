@@ -6,15 +6,16 @@ const { validarSesion } = require('../../services/client.service');
 
 const flowPrincipal = addKeyword(['hola', 'menu', 'buenas', 'buenos'])
     .addAction(
-        async (ctx, { endFlow, provider }) => {
-            const abc = await provider.getInstance();
-            await abc.chatModify({ archive: true, lastMessages: [ctx] }, ctx.key.remoteJid);
-
+        async (ctx, { flowDynamic, endFlow, provider }) => {
             const status = await validarSesion(ctx.from);
 
-            if (status) {
-                return endFlow();
+            if (!status) {
+                const abc = await provider.getInstance();
+                return await abc.chatModify({ archive: true, lastMessages: [ctx] }, ctx.key.remoteJid);
             }
+            
+            await flowDynamic(`🧑🏻‍💻 Por favor espere, nos encontramos trabajando para poder atenderle lo antes posible...`);
+            return endFlow();
         }
     )
     .addAnswer(`🙌 Hola ${obtenerSaludo()}, bienvenido al 🤖 chatbot de *Emenet*`)
