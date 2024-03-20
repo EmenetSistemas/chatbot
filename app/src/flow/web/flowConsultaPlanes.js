@@ -7,10 +7,10 @@ let tipoPlanes;
 const flowConsultaPlanes = addKeyword(['1', 'planes'], { sensitive: true })
     .addAnswer(
         [
-            '🤖 En Emenet Comunicaciones contamos con planes mensuales y planes anuales, cada uno con ventejas diferentes segun tus necesidades',
+            '🤖 En Emenet Comunicaciones contamos con planes mensuales y planes anuales, cada uno con ventajas diferentes según tus necesidades ¿Cuál te interesa más?',
             '',
-            '   *1.* Ver planes mensuales',
-            '   *2.* Ver planes anuales'
+            '   *1.* Planes mensuales',
+            '   *2.* Planes anuales'
         ],
         { capture: true },
         async ({ body }, { flowDynamic, fallBack }) => {
@@ -32,30 +32,18 @@ const flowConsultaPlanes = addKeyword(['1', 'planes'], { sensitive: true })
             }
 
             await flowDynamic('Se debe colocar una opción valida');
-            return fallBack();
+            return await fallBack();
         }
     )
     .addAction(
         { capture: true },
         async (ctx, { flowDynamic, gotoFlow, fallBack }) => {
-            if (ctx.body == '📋 Volver al menú principal') {
-                const { flowSecundario } = require("../start/flowSecundario");
-                return await gotoFlow(flowSecundario);
-            }
-
             const input = normalizeString(ctx.body);
 
-            if (isNaN(input)) {
-                await flowDynamic('Se debe colocar una opción válida');
-            } else {
+            if (!isNaN(input)) {
                 const plan = await obtenerPlanPorIdentificador(tipoPlanes, input);
 
-                if (!plan) {
-                    await flowDynamic([
-                        'No se encontró ningún plan con ese identificador.\nPor favor, introduce un identificador válido',
-                        '🤖 ¿Qué plan te interesa más?'
-                    ]);
-                } else {
+                if (plan) {
                     await flowDynamic(plan.mensaje);
 
                     const { flowSecundario } = require("../start/flowSecundario");
@@ -63,7 +51,12 @@ const flowConsultaPlanes = addKeyword(['1', 'planes'], { sensitive: true })
                 }
             }
 
-            return fallBack();
+            await flowDynamic([
+                'No se encontró ningún plan con ese identificador.\nPor favor, introduce un identificador válido',
+                '🤖 ¿Qué plan te interesa más?'
+            ]);
+
+            return await fallBack();
         }
     )
 
