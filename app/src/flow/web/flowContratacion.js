@@ -1,6 +1,6 @@
 const { addKeyword } = require("@bot-whatsapp/bot");
 
-const { obtenerZonasCobertura, normalizeString, obtenerPlanPorId, obtenerPlanesInternet, obtenerPlanPorIdentificador, obtenerPlanesInternetTipo } = require("../../services/web.service");
+const { obtenerZonasCobertura, normalizeString, obtenerPlanPorIdentificador, obtenerPlanesInternetTipo } = require("../../services/web.service");
 const { registrarSolicitudInstalacion } = require("../../services/client.service");
 
 let nombre, telefono, localidad, paquete, ubicacion, caracteristicasDomicilio, detallePaquete;

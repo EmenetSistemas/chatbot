@@ -308,27 +308,6 @@ const obtenerPlanesInternetTipo = async (tipoPago) => {
 };
 
 
-const obtenerPlanesInternet = async () => {
-    try {
-        const response = await axios.get(`${url}internet/planes`);
-        const objPlanes = response.data.data.planesInternet;
-
-        const mensajes = '\n' + objPlanes.map(item => {
-            const periodo = item.mensualidad ? 'al mes' : 'al año';
-            const pago = formatter.format(item.mensualidad ?? item.anualidad);
-
-            return `${item.pkTblPlan}. *${item.plan}* x *${pago}* ${periodo}`;
-        }).join('\n');
-
-        return [
-            mensajes,
-            'El costo base de instalación es de 💵 $500.00 pesos, el aumento del mismo va depender de la distancia de la caja más cercana hasta su domicilio 📍'
-        ];
-    } catch (error) {
-        return 'Upss...! Ocurrió un error inesperado, por favor intenta nuevamente';
-    }
-};
-
 const obtenerPlanPorIdentificador = async (tipoPago, indice) => {
     try {
         const response = await axios.get(`${url}internet/planes`);
@@ -355,30 +334,6 @@ const obtenerPlanPorIdentificador = async (tipoPago, indice) => {
     }
 };
 
-
-const obtenerPlanPorId = async (id) => {
-    try {
-        const response = await axios.get(`${url}internet/planes`);
-        const objPlanes = response.data.data.planesInternet;
-
-        const planEncontrado = objPlanes.find(plan => plan.pkTblPlan == id);
-
-        if (!planEncontrado) return null;
-
-        const periodo = planEncontrado.mensualidad ? 'al mes' : 'al año';
-        const servicios = planEncontrado.caracteristicas.map((element, index) => `    ${index + 1}. ${element.nombre}`).join('\n');
-        const pago = formatter.format(planEncontrado.mensualidad ?? planEncontrado.anualidad);
-
-        const mensaje = `*Plan seleccionado:* 🛜\n- ${(planEncontrado.tipoPlan == 1 ? 'P#' : 'PQ#') + planEncontrado.pkTblPlan} - (*${planEncontrado.plan}* x *${pago}* ${periodo})\n\n*Servicios:* 📋\n${servicios}\n\n*Recomendaciones:* ✔️\n- Dispositivos conectados simultaneamente: *${planEncontrado.dispositivosSimultaneos}*\n- Estudio / trabajo en casa simultáneamente: *${planEncontrado.estudioTrabajo}*\n- Reproducción de video: *${planEncontrado.reproduccionVideo}*\n- Juego en línea: *${planEncontrado.juegoLinea}*\n- Transmisiones en vivo: *${planEncontrado.transmisiones}*`;
-
-        return {
-            mensaje,
-            pkTblPlan: planEncontrado.pkTblPlan
-        };
-    } catch (error) {
-        return 'Upss...! Ocurrió un error inesperado, por favor intenta nuevamente';
-    }
-};
 
 const obtenerZonasCobertura = async (input) => {
     const inputNormalized = normalizeString(input);
@@ -440,9 +395,7 @@ const formatarResultado = (coincidencias) => {
 module.exports = {
     obtenerSaludo,
     normalizeString,
-    obtenerPlanesInternet,
     obtenerPlanesInternetTipo,
     obtenerPlanPorIdentificador,
-    obtenerPlanPorId,
     obtenerZonasCobertura
 };
