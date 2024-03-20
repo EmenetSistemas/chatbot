@@ -282,6 +282,32 @@ const formatter = new Intl.NumberFormat('es-MX', {
     minimumFractionDigits: 2
 });
 
+const obtenerPlanesInternetTipo = async (tipoPago) => {
+    try {
+        const response = await axios.get(`${url}internet/planes`);
+        const objPlanes = response.data.data.planesInternet.filter(item => {
+            return tipoPago === 'mensual' ? item.mensualidad : item.anualidad;
+        });
+
+        let contador = 1;
+        const mensajes = '\n' + objPlanes.map(item => {
+            const periodo = tipoPago === 'mensual' ? 'al mes' : 'al año';
+            const pago = formatter.format(tipoPago === 'mensual' ? item.mensualidad : item.anualidad);
+            const mensaje = `${contador}. *${item.plan}* x *${pago}* ${periodo}`;
+            contador++;
+            return mensaje;
+        }).join('\n');
+
+        return [
+            mensajes,
+            'El costo base de instalación es de 💵 $500.00 pesos, el aumento del mismo va depender de la distancia de la caja más cercana hasta su domicilio 📍'
+        ];
+    } catch (error) {
+        return 'Upss...! Ocurrió un error inesperado, por favor intenta nuevamente';
+    }
+};
+
+
 const obtenerPlanesInternet = async () => {
     try {
         const response = await axios.get(`${url}internet/planes`);
@@ -302,6 +328,33 @@ const obtenerPlanesInternet = async () => {
         return 'Upss...! Ocurrió un error inesperado, por favor intenta nuevamente';
     }
 };
+
+const obtenerPlanPorIdentificador = async (tipoPago, indice) => {
+    try {
+        const response = await axios.get(`${url}internet/planes`);
+        const objPlanes = response.data.data.planesInternet.filter(item => {
+            return tipoPago == '1' ? item.mensualidad : item.anualidad;
+        });
+
+        const planSeleccionado = objPlanes[indice - 1];
+
+        if (!planSeleccionado) return null;
+
+        const periodo = tipoPago == '1' ? 'al mes' : 'al año';
+        const servicios = planSeleccionado.caracteristicas.map((element, index) => `    ${index + 1}. ${element.nombre}`).join('\n');
+        const pago = formatter.format(tipoPago == '1' ? planSeleccionado.mensualidad : planSeleccionado.anualidad);
+
+        const mensaje = `*Plan seleccionado:* 🛜\n- ${(planSeleccionado.tipoPlan == 1 ? 'P#' : 'PQ#') + planSeleccionado.pkTblPlan} - (*${planSeleccionado.plan}* x *${pago}* ${periodo})\n\n*Servicios:* 📋\n${servicios}\n\n*Recomendaciones:* ✔️\n- Dispositivos conectados simultaneamente: *${planSeleccionado.dispositivosSimultaneos}*\n- Estudio / trabajo en casa simultáneamente: *${planSeleccionado.estudioTrabajo}*\n- Reproducción de video: *${planSeleccionado.reproduccionVideo}*\n- Juego en línea: *${planSeleccionado.juegoLinea}*\n- Transmisiones en vivo: *${planSeleccionado.transmisiones}*`;
+
+        return {
+            mensaje,
+            pkTblPlan: planSeleccionado.pkTblPlan
+        };
+    } catch (error) {
+        return 'Upss...! Ocurrió un error inesperado, por favor intenta nuevamente';
+    }
+};
+
 
 const obtenerPlanPorId = async (id) => {
     try {
@@ -388,6 +441,8 @@ module.exports = {
     obtenerSaludo,
     normalizeString,
     obtenerPlanesInternet,
+    obtenerPlanesInternetTipo,
+    obtenerPlanPorIdentificador,
     obtenerPlanPorId,
     obtenerZonasCobertura
 };
