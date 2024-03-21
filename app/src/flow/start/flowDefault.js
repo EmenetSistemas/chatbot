@@ -29,8 +29,14 @@ const flowDefault = addKeyword(EVENTS.WELCOME)
             `🤖 ¿En que puedo ayudarte el día de hoy?\n${obtenerOpcionesFlujoPrincipal()}`
         ],
         { capture: true },
-        async ({ body }, { flowDynamic, fallBack }) => {
-            const input = await normalizeString(body);
+        async (ctx, { flowDynamic, fallBack, endFlow }) => {
+            const status = await validarSesion(ctx.from);
+
+            if (status) {
+                return await endFlow();
+            }
+
+            const input = await normalizeString(ctx.body);
             const keywords = await flujosPrincipales.map(item => item.ctx.keyword).flat();
 
             const validate = await keywords.some(keyword => {
