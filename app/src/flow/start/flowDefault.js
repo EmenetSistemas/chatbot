@@ -54,15 +54,15 @@ const flowDefault = addKeyword(EVENTS.WELCOME)
 const flowDefault1 = addKeyword(EVENTS.MEDIA)
     .addAction(
         async (ctx, { endFlow, provider }) => {
-            const abc = await provider.getInstance();
-            await abc.readMessages([ctx.key]);
-            await abc.chatModify({ archive: true, lastMessages: [ctx] }, ctx.key.remoteJid);
-
             const status = await validarSesion(ctx.from);
 
             if (status) {
-                return endFlow();
+                return await endFlow();
             }
+            
+            const abc = await provider.getInstance();
+            await abc.readMessages([ctx.key]);
+            return await abc.chatModify({ archive: true, lastMessages: [ctx] }, ctx.key.remoteJid);
         }
     )
     .addAction(
