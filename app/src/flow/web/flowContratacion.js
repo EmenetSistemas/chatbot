@@ -234,8 +234,19 @@ const flowContratacion = addKeyword(['3', 'contratacion', 'internet'], { sensiti
 
             return flowDynamic([
                 '🤖 Muy bien, gracias por apoyarnos con tu información\n\nRecuerde que para confirmar 100% la cobertura en su domicilio es necesario el estudio que realizará el asesor',
-                'Uno de nuestros asesores 🧑🏻‍💻 se podrá en contacto contigo lo antes posible para concluir con este proceso, por favor este al pendiente de este chat...'
+                'Uno de nuestros asesores 🧑🏻‍💻 se podrá en contacto contigo lo antes posible para concluir con este proceso, por favor este al pendiente de este chat...\n\n    *0.* Si desea ver las opciones de nuevo para atender un asunto diferente mientras espera 🕑'
             ]);
+        }
+    )
+    .addAction(
+        { capture: true },
+        async ({ body }, { flowDynamic, fallBack, endFlow }) => {
+            if (body == '0') {
+                return await endFlow();
+            }
+
+            await flowDynamic('🧑🏻‍💻 Por favor espere, nos encontramos trabajando para poder atenderle lo antes posible...\n\n    *0.* Si desea ver las opciones de nuevo para atender un asunto diferente mientras espera 🕑');
+            return await fallBack();
         }
     )
 

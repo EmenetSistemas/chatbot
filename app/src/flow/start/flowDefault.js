@@ -12,8 +12,7 @@ const flowDefault = addKeyword(EVENTS.WELCOME)
             const status = await validarSesion(ctx.from);
 
             if (status) {
-                await flowDynamic(`🧑🏻‍💻 Por favor espere, nos encontramos trabajando para poder atenderle lo antes posible...`);
-                return endFlow();
+                return await endFlow();
             }
 
             const abc = await provider.getInstance();

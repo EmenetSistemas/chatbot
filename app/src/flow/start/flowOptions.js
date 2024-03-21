@@ -2,7 +2,7 @@ const { addKeyword } = require("@bot-whatsapp/bot");
 
 const { obtenerOpcionesFlujoPrincipal, flujosPrincipales } = require("../../services/generic.service");
 
-const flowOptions = addKeyword('keen_mclovin', { sensitive: true })
+const flowOptions = addKeyword('0', 'keen_mclovin', { sensitive: true })
     .addAnswer(
         [
             `🤖 ¿En que más puedo ayudarte el día de hoy?\n${obtenerOpcionesFlujoPrincipal()}`
