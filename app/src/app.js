@@ -1,6 +1,5 @@
 const { createBot } = require('@bot-whatsapp/bot');
 const MockAdapter = require('@bot-whatsapp/database/mock');
-const QRPortalWeb = require('@bot-whatsapp/portal');
 
 const { flow } = require('./flow');
 const { provider } = require('./shared/provider');
@@ -11,18 +10,17 @@ const router = require('../routes/api');
 const main = async () => {
     const app = express();
     app.use('/api', router);
-    
+
     await createBot({
         flow,
         provider,
         database: new MockAdapter()
     }, {
-        blackList:[]
+        blackList: []
     });
-    
-    QRPortalWeb();
-    const PORT = process.env.PORT || 4000;
-    app.listen(PORT, () => console.log(`App running on port ${PORT}`));
+
+    const PORT = process.env.PORT || 3000;
+    app.listen(PORT, () => console.log(`http://localhost:${PORT}`));
 }
 
 main();
