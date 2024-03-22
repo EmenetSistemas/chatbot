@@ -4,11 +4,14 @@ const MockAdapter = require('@bot-whatsapp/database/mock');
 const { flow } = require('./flow');
 const { provider } = require('./shared/provider');
 
+const bodyParser = require('body-parser');
 const express = require("express");
 const router = require('../routes/api');
 
 const main = async () => {
     const app = express();
+
+    app.use(bodyParser.json());
     app.use('/api', router);
 
     await createBot({
