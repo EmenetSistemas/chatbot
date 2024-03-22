@@ -4,7 +4,9 @@ async function enviarMensajeTexto(req, res) {
     const abc = await provider.getInstance();
     await abc.sendMessage(req.body.telefono+'@c.us', { text: req.body.mensaje });
 
-    res.status(200).send('Se envió el mensaje con éxito');
+    res.status(200).send({
+        message : 'Se envió el mensaje con éxito'
+    });
 }
 
 /*const abc = await provider.getInstance();
