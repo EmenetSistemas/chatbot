@@ -3,7 +3,7 @@ const { addKeyword } = require("@bot-whatsapp/bot");
 const { obtenerOpcionesFlujoPrincipal, flujosPrincipales } = require("../../services/generic.service");
 const { validarSesion } = require("../../services/client.service");
 
-const flowOptions = addKeyword('0', 'keen_mclovin', { sensitive: true })
+const flowOptions = addKeyword('keen_mclovin', { sensitive: true })
     .addAction(
         async ({ from }, { endFlow }) => {
             const status = await validarSesion(from);
@@ -24,7 +24,7 @@ const flowOptions = addKeyword('0', 'keen_mclovin', { sensitive: true })
             if (status) {
                 return await endFlow();
             }
-            
+
             const keywords = flujosPrincipales.map(item => item.ctx.keyword).flat();
 
             if (!keywords.includes(ctx.body)) {

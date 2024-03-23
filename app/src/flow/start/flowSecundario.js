@@ -1,7 +1,7 @@
 const { addKeyword } = require("@bot-whatsapp/bot");
 const { validarSesion } = require("../../services/client.service");
 
-const flowSecundario = addKeyword(['keen_mclovin'], { sensitive: true })
+const flowSecundario = addKeyword('keen_mclovin', { sensitive: true })
     .addAction(
         async (ctx, { flowDynamic, endFlow, provider }) => {
             const status = await validarSesion(ctx.from);
