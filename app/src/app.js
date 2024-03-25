@@ -7,11 +7,13 @@ const { provider } = require('./shared/provider');
 const bodyParser = require('body-parser');
 const express = require("express");
 const router = require('../routes/api');
+const cors = require('cors');
 
 const main = async () => {
     const app = express();
 
     app.use(bodyParser.json());
+    app.use(cors({ origin: '*' }));
     app.use('/api', router);
 
     await createBot({
@@ -23,7 +25,7 @@ const main = async () => {
     });
 
     const PORT = process.env.PORT || 3000;
-    app.listen(PORT, () => console.log(`http://localhost:${PORT}`));
+    app.listen(PORT, () => console.log(`Servidor escuchando en http://localhost:${PORT}`));
 }
 
 main();
